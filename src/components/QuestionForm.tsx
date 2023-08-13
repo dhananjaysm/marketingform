@@ -49,7 +49,7 @@ const QuestionForm: React.FC = () => {
     <div className="py-6">
       <h2 className="text-xl font-semibold mb-4">{currentQuestion.question}</h2>
       <div className="space-y-2">
-        {currentQuestion.options.map((option, index) => (
+        {currentQuestion.options.map((option, _) => (
           <button
             key={option.label}
             className="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded w-full text-left"
