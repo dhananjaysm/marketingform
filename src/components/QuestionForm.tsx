@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import { useQuestionStore } from "../context/store";
 import { FaCheckCircle, FaChevronLeft } from "react-icons/fa";
+import clsx from "clsx";
 const QuestionForm: React.FC = () => {
   const {
     questions,
     currentQuestionIndex,
     setCurrentQuestionIndex,
     answers,
+    descriptions,
     setAnswer,
     addToHistory,
     goBack,
   } = useQuestionStore();
   const currentQuestion = questions[currentQuestionIndex];
   const [inputValue, setInputValue] = useState<string>("");
+  const [optionDescription, setOptionDescription] = useState<string>(''); // State for option description
+  const [isProvidingDescription, setIsProvidingDescription] = useState<boolean>(false);
+
   console.log("Current Question:", currentQuestionIndex, currentQuestion);
   if (!currentQuestion) {
     return (
@@ -20,28 +25,49 @@ const QuestionForm: React.FC = () => {
         <h2 className="mb-4 text-xl font-semibold text-center">
           Questionnaire completed!
         </h2>
-
+  
         <div>
-          <h3>Selected Answers:</h3>
-          <ul>
-            {Object.keys(answers).map((index: any) => (
-              <li key={index}>
-                Question {index}: {answers[index]}
-              </li>
-            ))}
-          </ul>
-        </div>
+            <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="px-4 py-2 text-left">Question</th>
+                  <th className="px-4 py-2 text-left">Answer</th>
+                  <th className="px-4 py-2 text-left">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(answers).map((index: any) => (
+                  <tr key={index} className="border-t">
+                    <td className="px-4 py-2">{questions[index].question}</td>
+                    <td className="px-4 py-2">{answers[index]}</td>
+                    <td className="px-4 py-2">
+                      {descriptions[index] && (
+                        <span className="text-gray-500">
+                          {descriptions[index]}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
       </div>
     );
   }
-
   const handleOptionClick = (
     nextQuestionIndex: number,
-    optionLabel: string
+    optionLabel: string,
+    isDescriptionRequired: boolean
   ) => {
     setAnswer(currentQuestionIndex, optionLabel);
+    if (isDescriptionRequired) {
+      setIsProvidingDescription(true); // Set state to indicate description input
+      return; // Do not navigate immediately
+    }
     addToHistory(currentQuestionIndex); // Add current index to history
-    setCurrentQuestionIndex(nextQuestionIndex - 1);
+    setCurrentQuestionIndex(nextQuestionIndex);
 
     // Log the user's choice and next question index
     console.log("User chose:", optionLabel);
@@ -49,9 +75,31 @@ const QuestionForm: React.FC = () => {
   };
 
   const handleInputNextClick = () => {
+    // Handle the wait logic here
+    if (isProvidingDescription) {
+      // User must provide a description before proceeding
+      return;
+    }
+
     setAnswer(currentQuestionIndex, inputValue);
     addToHistory(currentQuestionIndex);
     setCurrentQuestionIndex(currentQuestion.options[0].nextQuestionIndex); // Assuming next question index
+  };
+
+  const handleDescriptionSubmit = () => {
+    // Store mapped description in descriptions state
+    setAnswer(currentQuestionIndex, answers[currentQuestionIndex], optionDescription);
+    setOptionDescription('');
+    setIsProvidingDescription(false); // Reset description input state
+    const nextQuestionIndex = currentQuestion.options.find(
+      (option) => option.label === answers[currentQuestionIndex]
+    )?.nextQuestionIndex;
+    if (nextQuestionIndex !== undefined) {
+      addToHistory(currentQuestionIndex);
+      setCurrentQuestionIndex(nextQuestionIndex);
+      console.log("moving to next")
+      setIsProvidingDescription(false); // Reset description input state
+    }
   };
 
   // const isInputQuestion = currentQuestion.options.length === 0; // Check if it's an input question
@@ -87,19 +135,46 @@ const QuestionForm: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-2">
-          {currentQuestion.options.map((option, _) => (
-            <button
-              key={option.label}
-              className="flex items-center justify-start w-full px-4 py-2 text-left bg-gray-200 rounded hover:bg-gray-300"
-              onClick={() =>
-                handleOptionClick(option.nextQuestionIndex, option.label)
-              }
-            >
-               {answers[currentQuestionIndex] === option.label && (
-                <FaCheckCircle className="mr-2" />
-              )}
-              {option.label}
-            </button>
+         {currentQuestion.options.map((option, index) => (
+            <div key={option.label}>
+              <button
+                className={`w-full flex justify-start items-center px-4 py-2 text-left bg-gray-200 rounded hover:bg-gray-300 ${
+                  answers[currentQuestionIndex] === option.label
+                    ? 'bg-blue-500 hover:bg-blue-700 text-black'
+                    : ''
+                }`}
+                onClick={() =>
+                  handleOptionClick(
+                    option.nextQuestionIndex,
+                    option.label,
+                    option.isDescriptionRequired
+                  )
+                }
+              >
+                {answers[currentQuestionIndex] === option.label && (
+                  <FaCheckCircle style={{ color: 'green' }} className={clsx("mr-2")} />
+                )}
+                {option.label}
+              </button>
+              {option.isDescriptionRequired &&
+                answers[currentQuestionIndex] === option.label && (
+                  <div className="mt-2">
+                    <textarea
+                      className="w-full p-2 border rounded"
+                      placeholder="Enter description..."
+                      value={optionDescription}
+                      onChange={(e) => setOptionDescription(e.target.value)}
+                    />
+                    <button
+                      className="px-4 py-2 mt-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                      onClick={handleDescriptionSubmit}
+                      disabled={!optionDescription}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+            </div>
           ))}
         </div>
       )}

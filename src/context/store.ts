@@ -4,6 +4,7 @@ import { questions } from '../lib/questionsData';
 export interface Option {
   label: string;
   nextQuestionIndex: number;
+  isDescriptionRequired: boolean
 }
 
 export interface Question {
@@ -18,7 +19,8 @@ interface QuestionStore {
     currentQuestionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     answers: Record<number, string>;
-    setAnswer: (index: number, answer: string) => void;
+    descriptions: Record<number, string | undefined>; // Add descriptions state
+    setAnswer: (index: number, answer: string, description?: string) => void; // Modify setAnswer to accept description
     history: number[]; 
     addToHistory: (index: number) => void; 
     goBack: () => void; 
@@ -31,11 +33,16 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
   currentQuestionIndex: 0,
   setCurrentQuestionIndex: (index) => set(() => ({ currentQuestionIndex: index })),
   answers: {},
-  setAnswer: (index, answer) =>
+  descriptions:{},
+  setAnswer: (index, answer, description) =>
     set((state) => ({
       answers: {
         ...state.answers,
         [index]: answer,
+      },
+      descriptions: {
+        ...state.descriptions,
+        [index]: description,
       },
     })),
   history: [], 
