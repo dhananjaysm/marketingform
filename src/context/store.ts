@@ -10,6 +10,7 @@ export interface Question {
   id: number;
   question: string;
   options: Option[];
+  isInputRequired:boolean;
 }
 
 interface QuestionStore {
@@ -18,9 +19,9 @@ interface QuestionStore {
     setCurrentQuestionIndex: (index: number) => void;
     answers: Record<number, string>;
     setAnswer: (index: number, answer: string) => void;
-    history: number[]; // Add history array
-    addToHistory: (index: number) => void; // Add addToHistory function
-    goBack: () => void; // Add goBack function
+    history: number[]; 
+    addToHistory: (index: number) => void; 
+    goBack: () => void; 
 }
 
 
@@ -37,16 +38,37 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
         [index]: answer,
       },
     })),
-  history: [], // Initialize history array
-  addToHistory: (index) => set((state) => ({ history: [...state.history, index] })),
+  history: [], 
+  addToHistory: (index) =>
+    set((state) => {
+      console.log('Adding to History:', index);
+      console.log('Current History:', state.history);
+
+      return {
+        history: [...state.history, index],
+      };
+    }),
+
   goBack: () =>
     set((state) => {
+      console.log('Going Back');
+      console.log('History:', state.history);
+
       const newHistory = [...state.history];
-      newHistory.pop(); // Remove the last index from history
+      // console.log('New History:', newHistory);
+      
       const prevIndex = newHistory[newHistory.length - 1]; // Get the previous index
+      
+      // If the history is empty, return to the first question
+      const currentQuestionIndex = prevIndex !== undefined ? prevIndex : 0;
+      newHistory.pop(); // Remove the last index from history
+
+      console.log('Previous Index:', prevIndex);
+      console.log('Current Index:', currentQuestionIndex);
+
       return {
         history: newHistory,
-        currentQuestionIndex: prevIndex, // Set the current index to the previous index
+        currentQuestionIndex,
       };
     }),
 }));

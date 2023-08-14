@@ -7,6 +7,7 @@ export const questions: Question[] = [
       { label: "Increase Brand Awareness", nextQuestionIndex: 2 },
       { label: "Generate Leads", nextQuestionIndex: 3 },
     ],
+    isInputRequired: false,
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ export const questions: Question[] = [
       { label: "Social Media", nextQuestionIndex: 4 },
       { label: "Content Marketing", nextQuestionIndex: 5 },
     ],
+    isInputRequired: false,
   },
   {
     id: 3,
@@ -23,6 +25,7 @@ export const questions: Question[] = [
       { label: "B2B", nextQuestionIndex: 6 },
       { label: "B2C", nextQuestionIndex: 7 },
     ],
+    isInputRequired: false,
   },
   {
     id: 4,
@@ -31,6 +34,7 @@ export const questions: Question[] = [
       { label: "Facebook", nextQuestionIndex: 8 },
       { label: "Instagram", nextQuestionIndex: 9 },
     ],
+    isInputRequired: false,
   },
   {
     id: 5,
@@ -39,6 +43,7 @@ export const questions: Question[] = [
       { label: "Blog Posts", nextQuestionIndex: 10 },
       { label: "Videos", nextQuestionIndex: 11 },
     ],
+    isInputRequired: false,
   },
   {
     id: 6,
@@ -47,6 +52,7 @@ export const questions: Question[] = [
       { label: "Technology", nextQuestionIndex: 12 },
       { label: "Healthcare", nextQuestionIndex: 13 },
     ],
+    isInputRequired: false,
   },
   {
     id: 7,
@@ -55,6 +61,7 @@ export const questions: Question[] = [
       { label: "18-24", nextQuestionIndex: 14 },
       { label: "25-34", nextQuestionIndex: 15 },
     ],
+    isInputRequired: false,
   },
   {
     id: 8,
@@ -63,6 +70,7 @@ export const questions: Question[] = [
       { label: "Fashion", nextQuestionIndex: 16 },
       { label: "Travel", nextQuestionIndex: 17 },
     ],
+    isInputRequired: false,
   },
   {
     id: 9,
@@ -71,6 +79,7 @@ export const questions: Question[] = [
       { label: "Food and Cooking", nextQuestionIndex: 18 },
       { label: "Fitness", nextQuestionIndex: 19 },
     ],
+    isInputRequired: false,
   },
   {
     id: 10,
@@ -79,6 +88,7 @@ export const questions: Question[] = [
       { label: "Weekly", nextQuestionIndex: 20 },
       { label: "Monthly", nextQuestionIndex: 21 },
     ],
+    isInputRequired: true,
   },
   {
     id: 11,
@@ -87,6 +97,7 @@ export const questions: Question[] = [
       { label: "Tutorials", nextQuestionIndex: 22 },
       { label: "Product Demos", nextQuestionIndex: 23 },
     ],
+    isInputRequired: false,
   },
   {
     id: 12,
@@ -95,6 +106,7 @@ export const questions: Question[] = [
       { label: "Software Development", nextQuestionIndex: 24 },
       { label: "Cybersecurity", nextQuestionIndex: 25 },
     ],
+    isInputRequired: false,
   },
   // ... Continue adding more questions and options
 ];
