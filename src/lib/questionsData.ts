@@ -8,11 +8,14 @@ export const questions: Question[] = [
         label: "Increase Brand Awareness",
         nextQuestionIndex: 2,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
       {
         label: "Generate Leads",
         nextQuestionIndex: 3,
         isDescriptionRequired: false,
+        isDropdownInputRequired:true,
+        dropdownOptions:["Option1","Option2"]
       },
     ],
     isInputRequired: false,
@@ -25,11 +28,13 @@ export const questions: Question[] = [
         label: "Social Media",
         nextQuestionIndex: 4,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
       {
         label: "Content Marketing",
         nextQuestionIndex: 5,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
     ],
     isInputRequired: false,
@@ -38,8 +43,8 @@ export const questions: Question[] = [
     id: 3,
     question: "What type of leads are you looking for?",
     options: [
-      { label: "B2B", nextQuestionIndex: 6, isDescriptionRequired: false },
-      { label: "B2C", nextQuestionIndex: 7, isDescriptionRequired: false },
+      { label: "B2B", nextQuestionIndex: 6, isDescriptionRequired: false,isDropdownInputRequired:false },
+      { label: "B2C", nextQuestionIndex: 7, isDescriptionRequired: false ,isDropdownInputRequired:false},
     ],
     isInputRequired: false,
   },
@@ -47,11 +52,12 @@ export const questions: Question[] = [
     id: 4,
     question: "Which social media platforms do you want to focus on?",
     options: [
-      { label: "Facebook", nextQuestionIndex: 8, isDescriptionRequired: true },
+      { label: "Facebook", nextQuestionIndex: 8, isDescriptionRequired: true,isDropdownInputRequired:false },
       {
         label: "Instagram",
         nextQuestionIndex: 9,
         isDescriptionRequired: false,
+        isDropdownInputRequired: false,
       },
     ],
     isInputRequired: false,
@@ -64,8 +70,9 @@ export const questions: Question[] = [
         label: "Blog Posts",
         nextQuestionIndex: 10,
         isDescriptionRequired: false,
+        isDropdownInputRequired: false,
       },
-      { label: "Videos", nextQuestionIndex: 11, isDescriptionRequired: false },
+      { label: "Videos", nextQuestionIndex: 11, isDescriptionRequired: false,isDropdownInputRequired:false },
     ],
     isInputRequired: false,
   },
@@ -77,11 +84,13 @@ export const questions: Question[] = [
         label: "Technology",
         nextQuestionIndex: 12,
         isDescriptionRequired: false,
+        isDropdownInputRequired: false,
       },
       {
         label: "Healthcare",
         nextQuestionIndex: 13,
         isDescriptionRequired: false,
+        isDropdownInputRequired: false,
       },
     ],
     isInputRequired: false,
@@ -90,8 +99,18 @@ export const questions: Question[] = [
     id: 7,
     question: "What age group is your B2C target audience in?",
     options: [
-      { label: "18-24", nextQuestionIndex: 14, isDescriptionRequired: false },
-      { label: "25-34", nextQuestionIndex: 15, isDescriptionRequired: false },
+      {
+        label: "18-24",
+        nextQuestionIndex: 14,
+        isDescriptionRequired: false,
+        isDropdownInputRequired: false,
+      },
+      {
+        label: "25-34",
+        nextQuestionIndex: 15,
+        isDescriptionRequired: false,
+        isDropdownInputRequired: false,
+      },
     ],
     isInputRequired: false,
   },
@@ -99,8 +118,8 @@ export const questions: Question[] = [
     id: 8,
     question: "What is your target audience on Facebook interested in?",
     options: [
-      { label: "Fashion", nextQuestionIndex: 16, isDescriptionRequired: false },
-      { label: "Travel", nextQuestionIndex: 17, isDescriptionRequired: false },
+      { label: "Fashion", nextQuestionIndex: 16, isDescriptionRequired: false, isDropdownInputRequired:false },
+      { label: "Travel", nextQuestionIndex: 17, isDescriptionRequired: false,isDropdownInputRequired:false },
     ],
     isInputRequired: false,
   },
@@ -112,8 +131,9 @@ export const questions: Question[] = [
         label: "Food and Cooking",
         nextQuestionIndex: 18,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
-      { label: "Fitness", nextQuestionIndex: 19, isDescriptionRequired: false },
+      { label: "Fitness", nextQuestionIndex: 19, isDescriptionRequired: false ,isDropdownInputRequired:false},
     ],
     isInputRequired: false,
   },
@@ -121,8 +141,8 @@ export const questions: Question[] = [
     id: 10,
     question: "How frequently do you plan to publish blog posts?",
     options: [
-      { label: "Weekly", nextQuestionIndex: 20, isDescriptionRequired: false },
-      { label: "Monthly", nextQuestionIndex: 21, isDescriptionRequired: false },
+      { label: "Weekly", nextQuestionIndex: 20, isDescriptionRequired: false,isDropdownInputRequired:false },
+      { label: "Monthly", nextQuestionIndex: 21, isDescriptionRequired: false,isDropdownInputRequired:false },
     ],
     isInputRequired: true,
   },
@@ -134,11 +154,13 @@ export const questions: Question[] = [
         label: "Tutorials",
         nextQuestionIndex: 22,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
       {
         label: "Product Demos",
         nextQuestionIndex: 23,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
     ],
     isInputRequired: false,
@@ -152,11 +174,13 @@ export const questions: Question[] = [
         label: "Software Development",
         nextQuestionIndex: 24,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
       {
         label: "Cybersecurity",
         nextQuestionIndex: 25,
         isDescriptionRequired: false,
+        isDropdownInputRequired:false
       },
     ],
     isInputRequired: false,

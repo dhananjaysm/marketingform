@@ -40,3 +40,32 @@
 .read-the-docs {
   color: #888;
 }
+
+.transition-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; /* Adjust the duration (0.5s) as needed */
+}
+
+.transition-fade.active {
+  opacity: 1;
+}
+
+.transition-slide {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.transition-slide.prev {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+
+.transition-opacity {
+  opacity: 1; /* Start with 1 opacity */
+  transition: opacity 0.5s ease-in-out; /* Transition for 0.5 seconds with ease-in-out timing function */
+}
+
+.exiting {
+  opacity: 0; /* When exiting a step, set opacity to 0 for fade-out effect */
+}

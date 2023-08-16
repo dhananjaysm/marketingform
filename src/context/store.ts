@@ -5,6 +5,8 @@ export interface Option {
   label: string;
   nextQuestionIndex: number;
   isDescriptionRequired: boolean
+  isDropdownInputRequired: boolean;
+  dropdownOptions?: string[]; 
 }
 
 export interface Question {
@@ -12,6 +14,12 @@ export interface Question {
   question: string;
   options: Option[];
   isInputRequired:boolean;
+  
+}
+interface UserDetails {
+  name: string;
+  email: string;
+  // Add more user details properties as needed
 }
 
 interface QuestionStore {
@@ -24,6 +32,8 @@ interface QuestionStore {
     history: number[]; 
     addToHistory: (index: number) => void; 
     goBack: () => void; 
+    userDetails: UserDetails; // New property to store user details
+    setUserDetails: (details: UserDetails) => void;
 }
 
 
@@ -78,5 +88,7 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
         currentQuestionIndex,
       };
     }),
+    userDetails: {name:'',email:''},
+    setUserDetails: (details) => set({ userDetails: details }),
 }));
 

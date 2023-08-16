@@ -12,6 +12,7 @@ const QuestionForm: React.FC = () => {
     setAnswer,
     addToHistory,
     goBack,
+    userDetails
   } = useQuestionStore();
   const currentQuestion = questions[currentQuestionIndex];
   const [inputValue, setInputValue] = useState<string>("");
@@ -27,32 +28,40 @@ const QuestionForm: React.FC = () => {
         </h2>
   
         <div>
-            <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="px-4 py-2 text-left">Question</th>
-                  <th className="px-4 py-2 text-left">Answer</th>
-                  <th className="px-4 py-2 text-left">Description</th>
+          <h3 className="mb-2 text-lg font-semibold">User Details:</h3>
+          <p>
+            Name: {userDetails.name} <br />
+            Email: {userDetails.email}
+          </p>
+        </div>
+  
+        <div className="mt-6">
+          <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2 text-left">Question</th>
+                <th className="px-4 py-2 text-left">Answer</th>
+                <th className="px-4 py-2 text-left">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(answers).map((index: any) => (
+                <tr key={index} className="border-t">
+                  <td className="px-4 py-2">{questions[index].question}</td>
+                  <td className="px-4 py-2">{answers[index]}</td>
+                  <td className="px-4 py-2">
+                    {descriptions[index] && (
+                      <span className="text-gray-500">
+                        {descriptions[index]}
+                      </span>
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {Object.keys(answers).map((index: any) => (
-                  <tr key={index} className="border-t">
-                    <td className="px-4 py-2">{questions[index].question}</td>
-                    <td className="px-4 py-2">{answers[index]}</td>
-                    <td className="px-4 py-2">
-                      {descriptions[index] && (
-                        <span className="text-gray-500">
-                          {descriptions[index]}
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -62,9 +71,13 @@ const QuestionForm: React.FC = () => {
     isDescriptionRequired: boolean
   ) => {
     setAnswer(currentQuestionIndex, optionLabel);
+    console.log("Description is required for this option",isDescriptionRequired);
     if (isDescriptionRequired) {
       setIsProvidingDescription(true); // Set state to indicate description input
       return; // Do not navigate immediately
+    }
+    if(currentQuestion.isInputRequired){
+      setIsProvidingDescription(false);
     }
     addToHistory(currentQuestionIndex); // Add current index to history
     setCurrentQuestionIndex(nextQuestionIndex);
@@ -75,6 +88,9 @@ const QuestionForm: React.FC = () => {
   };
 
   const handleInputNextClick = () => {
+
+    console.log(isProvidingDescription);
+    console.log("Sending this value:",inputValue);
     // Handle the wait logic here
     if (isProvidingDescription) {
       // User must provide a description before proceeding
@@ -122,7 +138,12 @@ const QuestionForm: React.FC = () => {
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) =>{
+              setIsProvidingDescription(false)
+              console.log(e.target.value);
+              setInputValue(e.target.value)
+
+            }}
             className="w-full p-2 border rounded"
           />
           <button
