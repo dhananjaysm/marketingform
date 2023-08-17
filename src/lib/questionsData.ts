@@ -1,189 +1,435 @@
 import { Question } from "../context/store";
-export const questions: Question[] = [
+// export const questions: Question[] = [
+//   {
+//     id: 1,
+//     question: "What is the main goal of your marketing campaign?",
+//     options: [
+//       {
+//         label: "Increase Brand Awareness",
+//         nextQuestionIndex: 2,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Generate Leads",
+//         nextQuestionIndex: 3,
+//         isDescriptionRequired: false,
+//         isDropdownInputRequired: true,
+//         descriptionOptions: ["Option1", "Option2"],
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 2,
+//     question: "How do you plan to increase brand awareness?",
+//     options: [
+//       {
+//         label: "Social Media",
+//         nextQuestionIndex: 4,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Content Marketing",
+//         nextQuestionIndex: 5,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 3,
+//     question: "What type of leads are you looking for?",
+//     options: [
+//       {
+//         label: "B2B",
+//         nextQuestionIndex: 6,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "B2C",
+//         nextQuestionIndex: 7,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 4,
+//     question: "Which social media platforms do you want to focus on?",
+//     options: [
+//       {
+//         label: "Facebook",
+//         nextQuestionIndex: 8,
+//         isDescriptionRequired: true,
+//
+//       },
+//       {
+//         label: "Instagram",
+//         nextQuestionIndex: 9,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 5,
+//     question: "What type of content are you planning for content marketing?",
+//     options: [
+//       {
+//         label: "Blog Posts",
+//         nextQuestionIndex: 10,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Videos",
+//         nextQuestionIndex: 11,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 6,
+//     question: "What industry is your B2B target audience in?",
+//     options: [
+//       {
+//         label: "Technology",
+//         nextQuestionIndex: 12,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Healthcare",
+//         nextQuestionIndex: 13,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 7,
+//     question: "What age group is your B2C target audience in?",
+//     options: [
+//       {
+//         label: "18-24",
+//         nextQuestionIndex: 14,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "25-34",
+//         nextQuestionIndex: 15,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 8,
+//     question: "What is your target audience on Facebook interested in?",
+//     options: [
+//       {
+//         label: "Fashion",
+//         nextQuestionIndex: 16,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Travel",
+//         nextQuestionIndex: 17,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 9,
+//     question: "What is your target audience on Instagram interested in?",
+//     options: [
+//       {
+//         label: "Food and Cooking",
+//         nextQuestionIndex: 18,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Fitness",
+//         nextQuestionIndex: 19,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 10,
+//     question: "How frequently do you plan to publish blog posts?",
+//     options: [
+//       {
+//         label: "Weekly",
+//         nextQuestionIndex: 20,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Monthly",
+//         nextQuestionIndex: 21,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: true,
+//   },
+//   {
+//     id: 11,
+//     question: "What type of videos are you planning?",
+//     options: [
+//       {
+//         label: "Tutorials",
+//         nextQuestionIndex: 22,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Product Demos",
+//         nextQuestionIndex: 23,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   {
+//     id: 12,
+//     question:
+//       "What specific area of technology is your B2B target audience interested in?",
+//     options: [
+//       {
+//         label: "Software Development",
+//         nextQuestionIndex: 24,
+//         isDescriptionRequired: false,
+//
+//       },
+//       {
+//         label: "Cybersecurity",
+//         nextQuestionIndex: 25,
+//         isDescriptionRequired: false,
+//
+//       },
+//     ],
+//     isInputRequired: false,
+//   },
+//   // ... Continue adding more questions and options
+// ];
+
+export const realQuestionsData: Question[] = [
   {
     id: 1,
-    question: "What is the main goal of your marketing campaign?",
+    question: "Help me grow my business through digital",
     options: [
       {
-        label: "Increase Brand Awareness",
-        nextQuestionIndex: 2,
+        label: "I have a D2C Brand",
         isDescriptionRequired: false,
-        isDropdownInputRequired:false
+
+        nextQuestionIndex: 1,
       },
       {
-        label: "Generate Leads",
-        nextQuestionIndex: 3,
+        label: "I have a B2B Business",
         isDescriptionRequired: false,
-        isDropdownInputRequired:true,
-        dropdownOptions:["Option1","Option2"]
+
+        nextQuestionIndex: 2,
+      },
+      {
+        label: "I am a Not for Profit Business",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 3,
       },
     ],
     isInputRequired: false,
   },
   {
     id: 2,
-    question: "How do you plan to increase brand awareness?",
+    question:
+      "We usually see a D2C brand use the following to reach and engage with their potential customers through these channels. Which of these are you using?",
     options: [
       {
-        label: "Social Media",
-        nextQuestionIndex: 4,
+        label: "Online Marketplaces",
         isDescriptionRequired: false,
-        isDropdownInputRequired:false
+
+        nextQuestionIndex: 4,
       },
       {
-        label: "Content Marketing",
-        nextQuestionIndex: 5,
+        label: "Social Media",
         isDescriptionRequired: false,
-        isDropdownInputRequired:false
+        nextQuestionIndex: 5,
+      },
+      {
+        label: "Website",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 6,
+      },
+      {
+        label: "Emailers",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 7,
+      },
+      {
+        label: "Whatsapp",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 8,
+      },
+      {
+        label: "Offline Store",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 9,
+      },
+      {
+        label: "Partnerships",
+        isDescriptionRequired: false,
+
+        nextQuestionIndex: 10,
       },
     ],
     isInputRequired: false,
   },
   {
     id: 3,
-    question: "What type of leads are you looking for?",
+    //i have a b2b
+    question: "How do you plan to increase brand awareness?",
     options: [
-      { label: "B2B", nextQuestionIndex: 6, isDescriptionRequired: false,isDropdownInputRequired:false },
-      { label: "B2C", nextQuestionIndex: 7, isDescriptionRequired: false ,isDropdownInputRequired:false},
+      {
+        label: "Social Media",
+        nextQuestionIndex: 4,
+        isDescriptionRequired: false,
+      },
+      {
+        label: "Content Marketing",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: false,
+      },
     ],
     isInputRequired: false,
   },
   {
     id: 4,
-    question: "Which social media platforms do you want to focus on?",
+    // I am a not for profit
+    question: "How do you plan to increase brand awareness?",
     options: [
-      { label: "Facebook", nextQuestionIndex: 8, isDescriptionRequired: true,isDropdownInputRequired:false },
       {
-        label: "Instagram",
-        nextQuestionIndex: 9,
+        label: "Social Media",
+        nextQuestionIndex: 4,
         isDescriptionRequired: false,
-        isDropdownInputRequired: false,
+      },
+      {
+        label: "Content Marketing",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: false,
       },
     ],
     isInputRequired: false,
   },
   {
     id: 5,
-    question: "What type of content are you planning for content marketing?",
+    question: "Online Marketplaces. Nice, which ones?",
     options: [
       {
-        label: "Blog Posts",
-        nextQuestionIndex: 10,
-        isDescriptionRequired: false,
-        isDropdownInputRequired: false,
-      },
-      { label: "Videos", nextQuestionIndex: 11, isDescriptionRequired: false,isDropdownInputRequired:false },
-    ],
-    isInputRequired: false,
-  },
-  {
-    id: 6,
-    question: "What industry is your B2B target audience in?",
-    options: [
-      {
-        label: "Technology",
-        nextQuestionIndex: 12,
-        isDescriptionRequired: false,
-        isDropdownInputRequired: false,
+        label: "Amazon",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great! Are you happy with it or concerned about them:",
+        descriptionOptions: [
+          "Being not optimized well for the platform",
+          "The commission rates are too high",
+          "Nah, I’m ok with it",
+        ],
       },
       {
-        label: "Healthcare",
-        nextQuestionIndex: 13,
-        isDescriptionRequired: false,
-        isDropdownInputRequired: false,
-      },
-    ],
-    isInputRequired: false,
-  },
-  {
-    id: 7,
-    question: "What age group is your B2C target audience in?",
-    options: [
-      {
-        label: "18-24",
-        nextQuestionIndex: 14,
-        isDescriptionRequired: false,
-        isDropdownInputRequired: false,
+        label: "Ebay",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great! Are you happy with it or concerned about them:",
+        descriptionOptions: [
+          "Being not optimized well for the platform",
+          "The commission rates are too high",
+          "Nah, I’m ok with it",
+        ],
       },
       {
-        label: "25-34",
-        nextQuestionIndex: 15,
-        isDescriptionRequired: false,
-        isDropdownInputRequired: false,
-      },
-    ],
-    isInputRequired: false,
-  },
-  {
-    id: 8,
-    question: "What is your target audience on Facebook interested in?",
-    options: [
-      { label: "Fashion", nextQuestionIndex: 16, isDescriptionRequired: false, isDropdownInputRequired:false },
-      { label: "Travel", nextQuestionIndex: 17, isDescriptionRequired: false,isDropdownInputRequired:false },
-    ],
-    isInputRequired: false,
-  },
-  {
-    id: 9,
-    question: "What is your target audience on Instagram interested in?",
-    options: [
-      {
-        label: "Food and Cooking",
-        nextQuestionIndex: 18,
-        isDescriptionRequired: false,
-        isDropdownInputRequired:false
-      },
-      { label: "Fitness", nextQuestionIndex: 19, isDescriptionRequired: false ,isDropdownInputRequired:false},
-    ],
-    isInputRequired: false,
-  },
-  {
-    id: 10,
-    question: "How frequently do you plan to publish blog posts?",
-    options: [
-      { label: "Weekly", nextQuestionIndex: 20, isDescriptionRequired: false,isDropdownInputRequired:false },
-      { label: "Monthly", nextQuestionIndex: 21, isDescriptionRequired: false,isDropdownInputRequired:false },
-    ],
-    isInputRequired: true,
-  },
-  {
-    id: 11,
-    question: "What type of videos are you planning?",
-    options: [
-      {
-        label: "Tutorials",
-        nextQuestionIndex: 22,
-        isDescriptionRequired: false,
-        isDropdownInputRequired:false
+        label: "Flipkart",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great! Are you happy with it or concerned about them:",
+        descriptionOptions: [
+          "Being not optimized well for the platform",
+          "The commission rates are too high",
+          "Nah, I’m ok with it",
+        ],
       },
       {
-        label: "Product Demos",
-        nextQuestionIndex: 23,
-        isDescriptionRequired: false,
-        isDropdownInputRequired:false
+        label: "Myntra",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great! Are you happy with it or concerned about them:",
+        descriptionOptions: [
+          "Being not optimized well for the platform",
+          "The commission rates are too high",
+          "Nah, I’m ok with it",
+        ],
+      },
+      {
+        label: "Etsy",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great! Are you happy with it or concerned about them:",
+        descriptionOptions: [
+          "Being not optimized well for the platform",
+          "The commission rates are too high",
+          "Nah, I’m ok with it",
+        ],
       },
     ],
     isInputRequired: false,
   },
   {
-    id: 12,
-    question:
-      "What specific area of technology is your B2B target audience interested in?",
-    options: [
+    id:6,
+    question:'Social Media',
+    options:[
       {
-        label: "Software Development",
-        nextQuestionIndex: 24,
-        isDescriptionRequired: false,
-        isDropdownInputRequired:false
-      },
-      {
-        label: "Cybersecurity",
-        nextQuestionIndex: 25,
-        isDescriptionRequired: false,
-        isDropdownInputRequired:false
-      },
+        label: "Content creation on own profiles",
+        nextQuestionIndex: 5,
+        isDescriptionRequired: true,
+        descriptionType: "text",
+        descriptionHeading:
+          "Great, how about you share your SM links so that we know you better?",
+        
+      }
     ],
-    isInputRequired: false,
-  },
-  // ... Continue adding more questions and options
+    isInputRequired:false,
+  }
 ];

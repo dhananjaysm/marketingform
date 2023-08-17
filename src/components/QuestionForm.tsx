@@ -12,12 +12,14 @@ const QuestionForm: React.FC = () => {
     setAnswer,
     addToHistory,
     goBack,
-    userDetails
+    userDetails,
   } = useQuestionStore();
   const currentQuestion = questions[currentQuestionIndex];
   const [inputValue, setInputValue] = useState<string>("");
-  const [optionDescription, setOptionDescription] = useState<string>(''); // State for option description
-  const [isProvidingDescription, setIsProvidingDescription] = useState<boolean>(false);
+  const [optionDescription, setOptionDescription] = useState<string>(""); // State for option description
+  const [isProvidingDescription, setIsProvidingDescription] =
+    useState<boolean>(false);
+  // const [dropdownValue, setDropdownValue] = useState<string>("");
 
   console.log("Current Question:", currentQuestionIndex, currentQuestion);
   if (!currentQuestion) {
@@ -26,7 +28,7 @@ const QuestionForm: React.FC = () => {
         <h2 className="mb-4 text-xl font-semibold text-center">
           Questionnaire completed!
         </h2>
-  
+
         <div>
           <h3 className="mb-2 text-lg font-semibold">User Details:</h3>
           <p>
@@ -34,7 +36,7 @@ const QuestionForm: React.FC = () => {
             Email: {userDetails.email}
           </p>
         </div>
-  
+
         <div className="mt-6">
           <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
           <table className="w-full border-collapse">
@@ -69,16 +71,25 @@ const QuestionForm: React.FC = () => {
     nextQuestionIndex: number,
     optionLabel: string,
     isDescriptionRequired: boolean
+    // descriptionOptions?: string[]
   ) => {
     setAnswer(currentQuestionIndex, optionLabel);
-    console.log("Description is required for this option",isDescriptionRequired);
+    console.log(
+      "Description is required for this option",
+      isDescriptionRequired
+    );
     if (isDescriptionRequired) {
       setIsProvidingDescription(true); // Set state to indicate description input
       return; // Do not navigate immediately
     }
-    if(currentQuestion.isInputRequired){
+    if (currentQuestion.isInputRequired) {
       setIsProvidingDescription(false);
     }
+    // // Check if dropdown options are available and set the default value
+    // if (isDropdownInputRequired) {
+    //   setIsProvidingDescription(true);
+    //   return;
+    // }
     addToHistory(currentQuestionIndex); // Add current index to history
     setCurrentQuestionIndex(nextQuestionIndex);
 
@@ -88,9 +99,7 @@ const QuestionForm: React.FC = () => {
   };
 
   const handleInputNextClick = () => {
-
     console.log(isProvidingDescription);
-    console.log("Sending this value:",inputValue);
     // Handle the wait logic here
     if (isProvidingDescription) {
       // User must provide a description before proceeding
@@ -104,8 +113,12 @@ const QuestionForm: React.FC = () => {
 
   const handleDescriptionSubmit = () => {
     // Store mapped description in descriptions state
-    setAnswer(currentQuestionIndex, answers[currentQuestionIndex], optionDescription);
-    setOptionDescription('');
+    setAnswer(
+      currentQuestionIndex,
+      answers[currentQuestionIndex],
+      optionDescription
+    );
+    setOptionDescription("");
     setIsProvidingDescription(false); // Reset description input state
     const nextQuestionIndex = currentQuestion.options.find(
       (option) => option.label === answers[currentQuestionIndex]
@@ -113,7 +126,7 @@ const QuestionForm: React.FC = () => {
     if (nextQuestionIndex !== undefined) {
       addToHistory(currentQuestionIndex);
       setCurrentQuestionIndex(nextQuestionIndex);
-      console.log("moving to next")
+      console.log("moving to next");
       setIsProvidingDescription(false); // Reset description input state
     }
   };
@@ -121,28 +134,27 @@ const QuestionForm: React.FC = () => {
   // const isInputQuestion = currentQuestion.options.length === 0; // Check if it's an input question
   return (
     <div className="py-6">
-       {currentQuestionIndex > 0 && (
-    <div className="flex items-center justify-start">
-      <button
-        className="flex items-center px-4 py-2 mt-4 font-bold text-blue-500 border rounded hover:bg-blue-100"
-        onClick={goBack}
-      >
-        <FaChevronLeft />
-        Back
-      </button>
-    </div>
-  )}
+      {currentQuestionIndex > 0 && (
+        <div className="flex items-center justify-start">
+          <button
+            className="flex items-center px-4 py-2 mt-4 font-bold text-blue-500 border rounded hover:bg-blue-100"
+            onClick={goBack}
+          >
+            <FaChevronLeft />
+            Back
+          </button>
+        </div>
+      )}
       <h2 className="mb-4 text-xl font-semibold">{currentQuestion.question}</h2>
       {currentQuestion.isInputRequired ? (
         <div className="flex">
           <input
             type="text"
             value={inputValue}
-            onChange={(e) =>{
-              setIsProvidingDescription(false)
+            onChange={(e) => {
+              setIsProvidingDescription(false);
               console.log(e.target.value);
-              setInputValue(e.target.value)
-
+              setInputValue(e.target.value);
             }}
             className="w-full p-2 border rounded"
           />
@@ -156,28 +168,32 @@ const QuestionForm: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-2">
-         {currentQuestion.options.map((option, index) => (
+          {currentQuestion.options.map((option, _) => (
             <div key={option.label}>
               <button
                 className={`w-full flex justify-start items-center px-4 py-2 text-left bg-gray-200 rounded hover:bg-gray-300 ${
                   answers[currentQuestionIndex] === option.label
-                    ? 'bg-blue-500 hover:bg-blue-700 text-black'
-                    : ''
+                    ? "bg-blue-500 hover:bg-blue-700 text-black"
+                    : ""
                 }`}
                 onClick={() =>
                   handleOptionClick(
                     option.nextQuestionIndex,
                     option.label,
                     option.isDescriptionRequired
+                    // option.descriptionOptions
                   )
                 }
               >
                 {answers[currentQuestionIndex] === option.label && (
-                  <FaCheckCircle style={{ color: 'green' }} className={clsx("mr-2")} />
+                  <FaCheckCircle
+                    style={{ color: "green" }}
+                    className={clsx("mr-2")}
+                  />
                 )}
                 {option.label}
               </button>
-              {option.isDescriptionRequired &&
+              {/* {option.isDescriptionRequired &&
                 answers[currentQuestionIndex] === option.label && (
                   <div className="mt-2">
                     <textarea
@@ -191,6 +207,85 @@ const QuestionForm: React.FC = () => {
                       onClick={handleDescriptionSubmit}
                       disabled={!optionDescription}
                     >
+                      Next
+                    </button>
+                  </div>
+                )} */}
+
+              {/* {option.isDropdownInputRequired &&
+                answers[currentQuestionIndex] === option.label && (
+                  <div>
+                    <select
+                      value={dropdownValue}
+                      onChange={(e) => setDropdownValue(e.target.value)}
+                      className="w-full p-2 mt-2 border rounded"
+                    >
+                      {currentQuestion.options
+                        .find(
+                          (opt) => opt.label === answers[currentQuestionIndex]
+                        )
+                        ?.descriptionOptions?.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                    </select>
+                    <button
+                      className="px-4 py-2 mt-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                      onClick={hanldeDropDownSubmit}
+                      // disabled={!optionDescription}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )} */}
+              {currentQuestion.options &&
+                option.isDescriptionRequired &&
+                answers[currentQuestionIndex] === option.label && (
+                  <div>
+                    {option.descriptionHeading && (
+                      <h2>{option.descriptionHeading}</h2>
+                    )}
+                    {option.descriptionType === "text" && (
+                      <textarea
+                        value={optionDescription}
+                        onChange={(e) => setOptionDescription(e.target.value)}
+                        className="w-full p-2 border rounded"
+                        placeholder="Enter description..."
+                      />
+                    )}
+                    {option.descriptionType === "dropdown" && (
+                      <select
+                        value={optionDescription}
+                        onChange={(e) => setOptionDescription(e.target.value)}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="">Select an option...</option>
+                        {option.descriptionOptions?.map((dropdownOption) => (
+                          <option key={dropdownOption} value={dropdownOption}>
+                            {dropdownOption}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    {option.descriptionType === "radio" && (
+                      <div>
+                        {option.descriptionOptions?.map((radioOption) => (
+                          <label key={radioOption} className="block">
+                            <input
+                              type="radio"
+                              value={radioOption}
+                              checked={optionDescription === radioOption}
+                              onChange={(e) =>
+                                setOptionDescription(e.target.value)
+                              }
+                            />
+                            {radioOption}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    <button onClick={handleDescriptionSubmit}>
                       Next
                     </button>
                   </div>

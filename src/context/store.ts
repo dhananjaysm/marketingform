@@ -1,12 +1,13 @@
 import {create} from 'zustand';
-import { questions } from '../lib/questionsData';
+import { realQuestionsData } from '../lib/questionsData';
 
 export interface Option {
   label: string;
   nextQuestionIndex: number;
-  isDescriptionRequired: boolean
-  isDropdownInputRequired: boolean;
-  dropdownOptions?: string[]; 
+  isDescriptionRequired: boolean;
+  descriptionHeading?: string;
+  descriptionType?: 'text' | 'dropdown' | 'radio'; 
+  descriptionOptions?: string[]; 
 }
 
 export interface Question {
@@ -39,7 +40,7 @@ interface QuestionStore {
 
 
 export const useQuestionStore = create<QuestionStore>((set) => ({
-  questions: questions,
+  questions: realQuestionsData,
   currentQuestionIndex: 0,
   setCurrentQuestionIndex: (index) => set(() => ({ currentQuestionIndex: index })),
   answers: {},
