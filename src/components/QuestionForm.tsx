@@ -147,7 +147,8 @@ const QuestionForm: React.FC = () => {
       )}
       <h2 className="mb-4 text-xl font-semibold">{currentQuestion.question}</h2>
       {currentQuestion.isInputRequired ? (
-        <div className="flex">
+        <div className="flex flex-col space-y-2">
+          <h2>{currentQuestion.inputHeading}</h2>
           <input
             type="text"
             value={inputValue}

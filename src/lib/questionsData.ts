@@ -417,19 +417,53 @@ export const realQuestionsData: Question[] = [
     isInputRequired: false,
   },
   {
-    id:6,
-    question:'Social Media',
-    options:[
+    //Social Media Option
+    id: 6,
+    question: "Social Media",
+    options: [
       {
         label: "Content creation on own profiles",
-        nextQuestionIndex: 5,
+        nextQuestionIndex: 7,
         isDescriptionRequired: true,
         descriptionType: "text",
         descriptionHeading:
           "Great, how about you share your SM links so that we know you better?",
-        
-      }
+      },
+      {
+        label: "Paid ads",
+        nextQuestionIndex: 7,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Ok, so what is your ROAS or RoI on the ads? We can help you calculate that for you if you need, and give you our recommendations?",
+        descriptionOptions: [
+          "That would be great",
+          "No, I’ll live with it for now",
+        ],
+      },
+      {
+        label: "Influencer Collabs",
+        nextQuestionIndex: 7,
+        isDescriptionRequired: true,
+        descriptionType: "radio",
+        descriptionHeading:
+          "Great, lets know your target audience better to suggest a plan forward",
+        descriptionOptions: [
+          "That would be great",
+          "No, I’ll live with it for now",
+        ],
+      },
     ],
-    isInputRequired:false,
-  }
+    isInputRequired: false,
+  },
+  {
+    //Social Media Option
+    id: 7,
+    question: "Website",
+    options: [
+      
+    ],
+    isInputRequired: true,
+    inputHeading:"Share your link and lets see how its doing for you."
+  },
 ];

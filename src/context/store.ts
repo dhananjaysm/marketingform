@@ -15,6 +15,7 @@ export interface Question {
   question: string;
   options: Option[];
   isInputRequired:boolean;
+  inputHeading?: string
   
 }
 interface UserDetails {
