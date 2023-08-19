@@ -1,0 +1,101 @@
+import {create} from 'zustand';
+
+
+// MockQuestions.ts
+const mockQuestions = [
+  {
+    id: '1',
+    isSubQuestion:false,
+    text: 'What is your preferred programming language?',
+    subquestions: [
+      {
+        id: '1-1',
+        text: 'JavaScript',
+        isQuestion: true,
+        nextQuestionId: '2',
+      },
+      {
+        id: '1-2',
+        text: 'Python',
+        isQuestion: true,
+        nextQuestionId: '3',
+      },
+      {
+        id: '1-3',
+        text: 'C++',
+        isQuestion: false,
+      },
+    ],
+  },
+  {
+    id: '2',
+    isSubQuestion:false,
+    text: 'What type of project are you working on?',
+    subquestions: [
+      {
+        id: '2-1',
+        text: 'Web development',
+        isQuestion: false,
+      },
+      {
+        id: '2-2',
+        text: 'Game development',
+        isQuestion: false,
+      },
+      {
+        id: '2-3',
+        text: 'Mobile app development',
+        isQuestion: false,
+      },
+    ],
+  },
+  {
+    id: '3',
+    isSubQuestion:false,
+    text: 'What do you like about Python?',
+    subquestions: [
+      {
+        id: '3-1',
+        text: 'Ease of use and readability',
+        isQuestion: false,
+      },
+      {
+        id: '3-2',
+        text: 'Rich ecosystem of libraries',
+        isQuestion: false,
+      },
+      {
+        id: '3-3',
+        text: 'Community support',
+        isQuestion: false,
+      },
+    ],
+  },
+];
+
+
+export interface Subquestion {
+  id: string;
+  text: string;
+  isQuestion: boolean; // Flag to indicate if it's a question
+  nextQuestionId?: string; // Reference to the next question (if it's a question)
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  subquestions: Subquestion[];
+  isSubQuestion:boolean;
+}
+
+interface FormState {
+  questions: Question[];
+  currentQuestionIndex: number;
+}
+
+const useStore = create<FormState>((set) => ({
+  questions: mockQuestions, // Initialize with your questions data
+  currentQuestionIndex: 0,
+}));
+
+export default useStore;

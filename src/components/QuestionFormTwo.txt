@@ -1,0 +1,133 @@
+import React, { useState } from "react";
+
+import useStore, { Subquestion } from "../context/storeTwo";
+
+
+const QuestionComponent: React.FC = () => {
+  const { questions, currentQuestionIndex } = useStore();
+  const currentQuestion = questions[currentQuestionIndex];
+  const [history, setHistory] = useState<{ questionIndex: number; selectedSubquestions: Subquestion[] }[]>([]);
+  const [selectedSubquestions, setSelectedSubquestions] = useState<Subquestion[]>([]);
+  const [showNextQuestions, setShowNextQuestions] = useState(false);
+  const [currentSubquestionIndex, setCurrentSubquestionIndex] = useState(0);
+
+  const handleSubquestionClick = (subquestion: Subquestion) => {
+    if (!selectedSubquestions.includes(subquestion)) {
+      setSelectedSubquestions([...selectedSubquestions, subquestion]);
+    } else {
+      setSelectedSubquestions(selectedSubquestions.filter((sq) => sq.id !== subquestion.id));
+    }
+  };
+  const handleContinueClick = () => {
+    const hasMappedQuestions = selectedSubquestions.some(
+      (subquestion) =>
+        subquestion.isQuestion && subquestion.nextQuestionId
+    );
+
+    if (hasMappedQuestions) {
+      setCurrentSubquestionIndex(0); // Reset current subquestion index
+      setShowNextQuestions(true);
+      setHistory([...history, { questionIndex: currentQuestionIndex, selectedSubquestions }]);
+    } else {
+      // Move to the next main question
+      setShowNextQuestions(false);
+      setCurrentSubquestionIndex(0); // Reset current subquestion index
+
+      if (currentQuestionIndex < questions.length - 1) {
+        useStore.setState({ currentQuestionIndex: currentQuestionIndex + 1 });
+      } else {
+        console.log('End of questions reached.');
+      }
+    }
+  };
+  const handleBackClick = () => {
+    if (history.length > 0) {
+      const lastHistoryItem = history.pop();
+      if (lastHistoryItem) {
+        const { questionIndex, selectedSubquestions: prevSelectedSubquestions } = lastHistoryItem;
+        useStore.setState({ currentQuestionIndex: questionIndex });
+        setSelectedSubquestions(prevSelectedSubquestions);
+        setShowNextQuestions(false);
+        setCurrentSubquestionIndex(0);
+        setHistory([...history]); // To update the history array without the popped item
+      }
+    }
+  };
+
+
+
+  const handleNextSubquestion = () => {
+    if (currentSubquestionIndex < filteredNextQuestionSubquestions.length - 1) {
+      setCurrentSubquestionIndex((prevIndex) => prevIndex + 1);
+    } else {
+      setShowNextQuestions(false);
+      setCurrentSubquestionIndex(0); // Reset current subquestion index
+
+      if (currentQuestionIndex < questions.length - 1) {
+        useStore.setState({ currentQuestionIndex: currentQuestionIndex + 1 });
+      } else {
+        console.log('End of questions reached.');
+      }
+    }
+  };
+
+  const filteredNextQuestionSubquestions = currentQuestion.subquestions.filter(
+    (subquestion) =>
+      subquestion.isQuestion && subquestion.nextQuestionId
+  );
+
+  return (
+    <div className="max-w-md p-6 mx-auto mt-8 bg-gray-100 rounded-lg">
+      <p className="mb-4 text-lg font-semibold">{currentQuestion.text}</p>
+      <div className="space-y-2">
+        {currentQuestion.subquestions.map((subquestion) => (
+          <button
+            key={subquestion.id}
+            onClick={() => handleSubquestionClick(subquestion)}
+            className={`block ${
+              selectedSubquestions.some((sq) => sq.id === subquestion.id)
+                ? 'bg-blue-300 text-white'
+                : 'bg-gray-300 text-gray-800'
+            } px-4 py-2 rounded hover:bg-blue-600 transition`}
+          >
+            {subquestion.text}
+          </button>
+        ))}
+      </div>
+      {!showNextQuestions && (
+        <button
+          onClick={handleContinueClick}
+          className="px-4 py-2 mt-4 text-white transition bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Continue
+        </button>
+      )}
+       {showNextQuestions && (
+        <div className="p-4 mt-4 bg-gray-200 rounded">
+          <p className="text-sm">
+            {filteredNextQuestionSubquestions.length > 0 &&
+              filteredNextQuestionSubquestions[currentSubquestionIndex]?.nextQuestionId &&
+              questions.find(
+                (q) =>
+                  q.id === filteredNextQuestionSubquestions[currentSubquestionIndex].nextQuestionId
+              )?.text}
+          </p>
+          <button
+            onClick={handleBackClick}
+            className="px-4 py-2 mt-2 mr-2 text-white transition bg-blue-500 rounded hover:bg-blue-600"
+          >
+            Back
+          </button>
+          <button
+            onClick={handleNextSubquestion}
+            className="px-4 py-2 mt-2 text-white transition bg-blue-500 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default QuestionComponent;

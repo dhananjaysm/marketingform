@@ -2,15 +2,17 @@ import { useState } from "react";
 import "./App.css";
 
 import { useQuestionStore } from "./context/store";
+import QuestionFormThree from "./components/QuestionFormThree";
 import { UserDetailsForm } from "./components/UserDetailsForm";
-import QuestionForm from "./components/QuestionForm";
+
 const App: React.FC = () => {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [inputDetail, setInputDetail] = useState('');
 
-  const { setUserDetails, setCurrentQuestionIndex } = useQuestionStore();
+  const { setUserDetails,setCurrentQuestionIndex } = useQuestionStore();
+
 
   const handleUserDetailsSubmit = () => {
     if (currentStep === 1) {
@@ -21,16 +23,17 @@ const App: React.FC = () => {
       setUserEmail(inputDetail);
       setInputDetail('');
       setUserDetails({ name: userName, email: inputDetail });
-
-      // Start the questionnaire by setting the current question index
+// Start the questionnaire by setting the current question index
       setCurrentQuestionIndex(0);
     }
   };
 
+  
+
   return (
     <div className="container p-4 mx-auto">
       {userName && userEmail ? (
-        <QuestionForm /> // Render the QuestionForm if user details are filled
+      <QuestionFormThree/>
       ) : (
         <UserDetailsForm
           currentStep={currentStep}
@@ -42,6 +45,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 
 export default App;

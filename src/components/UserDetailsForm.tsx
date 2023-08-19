@@ -1,5 +1,5 @@
 // UserDetailsForm.tsx
-import React from 'react';
+import React from "react";
 
 interface UserDetailsFormProps {
   currentStep: number;
@@ -14,42 +14,46 @@ export const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
   setInputDetail,
   handleUserDetailsSubmit,
 }) => {
-
-    
-
-return (
+  return (
     <div className="flex justify-center">
-      <div className={`w-full p-6 bg-gray-200 rounded transition-fade ${currentStep === 1 ? 'active' : 'active'}`}>
-        <h2 className="mb-4 text-xl font-semibold text-center">
-          {currentStep === 1 ? 'Enter Your Name' : 'Enter Your Email'}
-        </h2>
+     <section className="flex flex-col max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 md:flex-row ">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleUserDetailsSubmit();
           }}
         >
-          <div className="mb-4">
-            <label htmlFor="detail" className="block mb-2 font-medium">
-              {currentStep === 1 ? 'Name' : 'Email'}
-            </label>
-            <input
-              type={currentStep === 1 ? 'text' : 'email'}
-              id="detail"
-              value={inputDetail}
-              onChange={(e) => setInputDetail(e.target.value)}
-              className="w-full p-2 transition-all duration-1000 ease-in-out border rounded"
-              required
-            />
+          <div className="max-w-3xl px-6 py-16 mx-auto text-center">
+            <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">
+              {currentStep === 1 ? "Enter Your Name" : "Enter Your Email"}
+            </h1>
+            <p className="max-w-md mx-auto mt-5 text-gray-500 dark:text-gray-400">
+              Please provide following details.
+            </p>
+
+            <div className="flex flex-col mt-8 space-y-3 sm:space-y-0 sm:flex-row sm:justify-center sm:-mx-2">
+              <input
+                required
+                id={currentStep === 1 ? "name" : "email"}
+                type={currentStep === 1 ? "text" : "email"}
+                className="px-4 py-2 text-gray-700 bg-white border rounded-md sm:mx-2 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                placeholder={
+                  currentStep === 1 ? "Enter Your Name" : "Enter Your Email"
+                }
+                value={inputDetail}
+                onChange={(e) => setInputDetail(e.target.value)}
+              />
+
+              <button
+                type="submit"
+                className="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-700 rounded-md sm:mx-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Next
+              </button>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-          >
-            {currentStep === 1 ? 'Next' : 'Submit'}
-          </button>
         </form>
-      </div>
+      </section>
     </div>
   );
 };
