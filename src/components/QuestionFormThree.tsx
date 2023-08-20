@@ -80,7 +80,7 @@ const QuestionFormThree: React.FC = () => {
     console.log(answers);
     return (
       <section className="container p-8 mx-auto bg-white rounded-lg shadow-lg min-w-[400px] md:min-w-xl dark:bg-gray-800 ">
-        <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
+        <h3 className="mb-2 text-lg font-semibold dark:text-white">Selected Answers:</h3>
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
@@ -91,8 +91,8 @@ const QuestionFormThree: React.FC = () => {
           <tbody>
             {flowQuestions.map((question, index) => (
               <tr key={index} className="border-t">
-                <td className="px-4 py-2">{question.question}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 dark:text-white">{question.question}</td>
+                <td className="px-4 py-2 dark:text-white">
                   {answers[index]?.join(", ") || "No answer"}
                 </td>
               </tr>
@@ -153,7 +153,7 @@ const QuestionFormThree: React.FC = () => {
           </button>
         </div>
       )}
-      <h2 className="mb-4 text-xl font-semibold text-gray-800">{currentQuestion.question}</h2>
+      <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">{currentQuestion.question}</h2>
       <div className="space-y-2">
         {currentQuestion.options.map((option, _) => (
           <div
