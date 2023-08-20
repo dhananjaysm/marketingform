@@ -10,6 +10,7 @@ const mockQuestions: Question[] = [
       { id: 2, label: "I have a B2B Business", subQuestionIndex: 1 },
       { id: 3, label: "I am a not for profit business" },
     ],
+   
     hasMultipleAnswers: false,
     isFollowUpQuestion: false,
   },
@@ -22,7 +23,12 @@ const mockSubQuestions: Question[] = [
     question:
       "We usually see a D2C brand use the following to reach and engage with their potential customers through these channels. Which of these are you using?    ",
     options: [
-      { id: 1, label: "Online marketplaces", subQuestionIndex: 2, optionIcon:'' },
+      {
+        id: 1,
+        label: "Online marketplaces",
+        subQuestionIndex: 2,
+        optionIcon: "",
+      },
       { id: 2, label: "Social Media", subQuestionIndex: 4 },
       { id: 3, label: "Website", subQuestionIndex: 9 },
       { id: 4, label: "Emailers" },
@@ -98,7 +104,8 @@ const mockSubQuestions: Question[] = [
     id: 7,
     question:
       "Great, how about you share your SM links so that we know you better?",
-    options: [{ id: 1, label: "Ask for text input" }],
+    options: [],
+    inputType: "text",
     hasMultipleAnswers: false,
     isFollowUpQuestion: false,
   },
@@ -116,7 +123,15 @@ const mockSubQuestions: Question[] = [
   {
     id: 9,
     question: "Upload reports",
-    options: [{ id: 1, label: "Ask for reports" }],
+    options: [],
+    subQuestionForm:[
+      {
+        questionId:1,
+        label:"Please upload the report",
+        inputType:'fileUpload',
+        value:''
+      }
+    ],
     hasMultipleAnswers: false,
     isFollowUpQuestion: true,
   },
@@ -124,7 +139,92 @@ const mockSubQuestions: Question[] = [
     id: 10,
     question:
       "Great, lets know your target audience better to suggest a plan forward",
-    options: [{ id: 1, label: "Define Age Dropdown" }],
+    options: [],
+    subQuestionForm: [
+      {
+        questionId: 1,
+        inputType: "dropdown",
+        label: "Define age group",
+        options: [
+          { id: 1, label: "1 to 20 (years)" },
+          { id: 2, label: "21 to 40 (years)" },
+          { id: 3, label: "41 to 60 (years)" },
+          { id: 4, label: "61 to 80 (years)" },
+        ],
+        value: [], // Store the selected option label here
+      },
+      {
+        questionId: 2,
+        inputType: "multiSelect",
+        label: "Define Location",
+        options: [
+          { id: 1, label: "India" },
+          { id: 2, label: "International" },
+          // Add more options...
+        ],
+        value: "", // Store the selected option label here
+      },
+      {
+        questionId: 3,
+        inputType: "multiSelect",
+        label: "Select Location type in India",
+        options: [
+          { id: 1, label: "Metropolitan" },
+          { id: 2, label: "Town 2" },
+          { id: 3, label: "Town 3" },
+          { id: 4, label: "Villages" },
+          // Add more options...
+        ],
+        value: "", // Store the selected option label here
+      },
+      {
+        questionId: 4,
+        inputType: "multiSelect",
+        label: "Select International Location",
+        options: [
+          { id: 1, label: "Europe" },
+          { id: 2, label: "US" },
+          { id: 3, label: "South East Asia" },
+          { id: 4, label: "Middle East" },
+          { id: 5, label: "Australia" },
+          // Add more options...
+        ],
+        value: "", // Store the selected option label here
+      },
+      {
+        questionId: 5,
+        inputType: "multiSelect",
+        label: "Select Gender",
+        options: [
+          { id: 1, label: "Male" },
+          { id: 2, label: "Female" },
+
+          // Add more options...
+        ],
+        value: "", // Store the selected option label here
+      },
+      {
+        questionId: 6,
+        inputType: "text",
+        label:
+          "Do you have a budget you want us to keep in mind for a campaign in a month?",
+        options: [],
+        value: "", // Store the selected option label here
+      },
+
+      // {
+      //   questionId: 4,
+      //   inputType: "radio",
+      //   label: "Select a radio option",
+      //   options: [
+      //     { id: 1, label: "Radio 1" },
+      //     { id: 2, label: "Radio 2" },
+      //     // Add more options...
+      //   ],
+      //   value: "", // Store the selected radio option label here
+      // },
+      // Add more form fields...
+    ],
     hasMultipleAnswers: false,
     isFollowUpQuestion: false,
   },
@@ -148,7 +248,7 @@ const mockSubQuestions: Question[] = [
 
     id: 12,
     question:
-      "Should we help you with finding some people who can help you create it?",
+      "No social media content? Should we help you with finding some people who can help you create it?",
     options: [
       { id: 1, label: "Yes,please" },
       {
@@ -156,6 +256,8 @@ const mockSubQuestions: Question[] = [
         label: "No, I need a other digital services for my business",
       },
     ],
+    inputHeading:
+      "If you’re not doing this, you really really must, especially since you’re a D2C brand. It’s possibly where most of the time of your potential customers is being spent to reach your potential customers, build trust with them and build loyalty with them.",
     hasMultipleAnswers: false,
     isFollowUpQuestion: false,
   },
@@ -175,17 +277,6 @@ const mockSubQuestions: Question[] = [
     id: 14,
     question: "Great, do you have a website?",
     options: [
-      { id: 1, label: "Yes", subQuestionIndex: 13 },
-      { id: 1, label: "No", subQuestionIndex: 13 },
-    ],
-
-    hasMultipleAnswers: false,
-    isFollowUpQuestion: false,
-  },
-  {
-    id: 15,
-    question: "And a Linkedin profile?",
-    options: [
       { id: 1, label: "Yes", subQuestionIndex: 14 },
       { id: 1, label: "No", subQuestionIndex: 14 },
     ],
@@ -194,7 +285,34 @@ const mockSubQuestions: Question[] = [
     isFollowUpQuestion: false,
   },
   {
+    id: 15,
+    question: "Please share your website link.",
+    options: [],
+    inputType: "text",
+    hasMultipleAnswers: false,
+    isFollowUpQuestion: true,
+  },
+  {
     id: 16,
+    question: "And a Linkedin profile?",
+    options: [
+      { id: 1, label: "Yes", subQuestionIndex: 16 },
+      { id: 1, label: "No", subQuestionIndex: 16 },
+    ],
+
+    hasMultipleAnswers: false,
+    isFollowUpQuestion: false,
+  },
+  {
+    id: 17,
+    question: "Please share your LinkedIn profile link.",
+    options: [],
+    inputType: "text",
+    hasMultipleAnswers: false,
+    isFollowUpQuestion: true,
+  },
+  {
+    id: 18,
     question: "And are you running any campaigns as of now?",
     options: [
       { id: 1, label: "Yes" },
@@ -210,8 +328,15 @@ export interface Option {
   id: number;
   label: string;
   subQuestionIndex?: number;
-  optionIcon?:string;
+  optionIcon?: string;
+}
 
+export interface FormField {
+  questionId: number;
+  inputType: "text" | "dropdown" | "radio" | "multiSelect" | "fileUpload";
+  label?: string; // Label for the input (if applicable)
+  options?: Option[]; // Options for dropdown or radio (if applicable)
+  value: string | string[]; // Current value of the field
 }
 
 export interface Question {
@@ -219,9 +344,10 @@ export interface Question {
   question: string;
   options: Option[];
   hasMultipleAnswers: boolean;
-  descriptionHeading?: string;
-  descriptionType?: "text" | "dropdown" | "radio";
+  inputHeading?: string;
+  inputType?: "text" | "dropdown" | "radio";
   isFollowUpQuestion: boolean;
+  subQuestionForm?: FormField[];
 }
 
 interface UserDetails {
@@ -274,27 +400,26 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
         },
       };
     }),
-    insertSubQuestion: (subQuestionIndex) =>
+  insertSubQuestion: (subQuestionIndex) =>
     set((state) => {
       const subQuestion = state.subQuestions[subQuestionIndex];
-  
+
       if (!subQuestion) {
         console.error(`Sub-question not found for index ${subQuestionIndex}`);
         console.log("Current subquestions:", state.subQuestions);
         return state; // Return the original state if sub-question is not found
       }
-  
+
       const isSubQuestionAlreadyInserted =
         state.flowQuestions.includes(subQuestion);
-  
+
       if (!isSubQuestionAlreadyInserted) {
         // Find the index of the next question in flowQuestions
         const nextQuestionIndex = state.flowQuestions.findIndex(
           (question) =>
-            question.id ===
-            state.subQuestions[subQuestionIndex + 1]?.id
+            question.id === state.subQuestions[subQuestionIndex + 1]?.id
         );
-  
+
         // If the next question is found, insert the sub-question before it
         const newFlowQuestions = [...state.flowQuestions];
         if (nextQuestionIndex !== -1) {
@@ -302,9 +427,9 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
         } else {
           newFlowQuestions.push(subQuestion);
         }
-  
+
         console.log("New Flow Questions", newFlowQuestions);
-  
+
         // If the next sub-question has isFollowUpQuestion flag true
         if (
           subQuestionIndex + 1 < state.subQuestions.length &&
@@ -316,72 +441,75 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
             "Inserting next sub-question with isFollowUpQuestion flag"
           );
         }
-  
+
         return {
           ...state, // Include all existing properties
           flowQuestions: newFlowQuestions,
         };
       }
-  
+
       return state; // Return the original state if sub-question is already inserted
     }),
 
   // Method to remove a sub-question from the flowQuestions array
   removeSubQuestion: (subQuestionIndex) =>
-  set((state) => {
-    const subQuestion = state.subQuestions[subQuestionIndex];
+    set((state) => {
+      const subQuestion = state.subQuestions[subQuestionIndex];
 
-    if (!subQuestion) {
-      console.error(`Sub-question not found for index ${subQuestionIndex}`);
-      return state; // Return the original state if sub-question is not found
-    }
-
-    const newFlowQuestions = state.flowQuestions.filter(
-      (question) => question !== subQuestion
-    );
-
-    // If the next sub-question has isFollowUpQuestion flag and there's a next sub-question
-    if (
-      subQuestionIndex + 1 < state.subQuestions.length &&
-      state.subQuestions[subQuestionIndex + 1].isFollowUpQuestion
-    ) {
-      const nextSubQuestion = state.subQuestions[subQuestionIndex + 1];
-      const nextSubQuestionIndex = newFlowQuestions.indexOf(nextSubQuestion);
-      if (nextSubQuestionIndex !== -1) {
-        newFlowQuestions.splice(nextSubQuestionIndex, 1);
-        console.log(newFlowQuestions);
-        console.log(
-          `Removing next sub-question with isFollowUpQuestion flag`
-        );
+      if (!subQuestion) {
+        console.error(`Sub-question not found for index ${subQuestionIndex}`);
+        return state; // Return the original state if sub-question is not found
       }
-    }
 
-    return {
-      ...state, // Include all existing properties
-      flowQuestions: newFlowQuestions,
-    };
-  }),
+      const newFlowQuestions = state.flowQuestions.filter(
+        (question) => question !== subQuestion
+      );
+
+      // If the next sub-question has isFollowUpQuestion flag and there's a next sub-question
+      if (
+        subQuestionIndex + 1 < state.subQuestions.length &&
+        state.subQuestions[subQuestionIndex + 1].isFollowUpQuestion
+      ) {
+        const nextSubQuestion = state.subQuestions[subQuestionIndex + 1];
+        const nextSubQuestionIndex = newFlowQuestions.indexOf(nextSubQuestion);
+        if (nextSubQuestionIndex !== -1) {
+          newFlowQuestions.splice(nextSubQuestionIndex, 1);
+          console.log(newFlowQuestions);
+          console.log(
+            `Removing next sub-question with isFollowUpQuestion flag`
+          );
+        }
+      }
+
+      return {
+        ...state, // Include all existing properties
+        flowQuestions: newFlowQuestions,
+      };
+    }),
   userDetails: { name: "", email: "" },
   setUserDetails: (details) => set({ userDetails: details }),
   goBack: () =>
-  set((state) => {
-    const newFlowQuestions = state.flowQuestions.slice(0, state.currentQuestionIndex);
-    const newAnswers = { ...state.answers };
-    const removedQuestionIndices = Object.keys(state.answers)
-      .map(Number)
-      .filter((index) => index >= state.currentQuestionIndex);
+    set((state) => {
+      const newFlowQuestions = state.flowQuestions.slice(
+        0,
+        state.currentQuestionIndex
+      );
+      const newAnswers = { ...state.answers };
+      const removedQuestionIndices = Object.keys(state.answers)
+        .map(Number)
+        .filter((index) => index >= state.currentQuestionIndex);
 
-    for (const index of removedQuestionIndices) {
-      delete newAnswers[index];
-    }
+      for (const index of removedQuestionIndices) {
+        delete newAnswers[index];
+      }
 
-    return {
-      ...state,
-      currentQuestionIndex: state.currentQuestionIndex - 1,
-      flowQuestions: newFlowQuestions,
-      answers: newAnswers,
-    };
-  }),
+      return {
+        ...state,
+        currentQuestionIndex: state.currentQuestionIndex - 1,
+        flowQuestions: newFlowQuestions,
+        answers: newAnswers,
+      };
+    }),
 }));
 
 export default useQuestionStore;

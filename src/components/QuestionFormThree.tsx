@@ -1,5 +1,8 @@
-import useQuestionStore, { Option } from "../context/storeThree";
-import {  FaChevronLeft } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import useQuestionStore, { FormField, Option } from "../context/storeThree";
+import { FaChevronLeft } from "react-icons/fa";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import app from "../lib/firebase";
 
 const QuestionFormThree: React.FC = () => {
   const {
@@ -12,75 +15,208 @@ const QuestionFormThree: React.FC = () => {
     setCurrentQuestionIndex,
     goBack,
   } = useQuestionStore();
-  // const [questionFlow, setQuestionFlow] = useState<number[]>([
-  //   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  // ]);
-  // const [selectedOption, setSelectedOption] = useState<Option>();
-
   const currentQuestion = flowQuestions[currentQuestionIndex];
-
+  const [inputValue, setInputValue] = useState(""); // Local state for input value
+  const [formFields, setFormFields] = useState<FormField[]>([]);
+  useEffect(() => {
+    if (currentQuestion && currentQuestion.subQuestionForm) {
+      // Initialize formFields based on subQuestionForm
+      const initialFormFields = currentQuestion.subQuestionForm.map(
+        (field) => ({
+          ...field,
+          value: "", // Set the initial value for each form field
+        })
+      );
+      setFormFields(initialFormFields);
+    }
+  }, [currentQuestion]);
   const handleOptionSelect = (option: Option) => {
     const currentAnswers = answers[currentQuestionIndex] || [];
+    const isSelected = currentAnswers.includes(option.label);
 
-    // Check if the selected option label is already present in answers
-    if (currentAnswers.includes(option.label)) {
-      const updatedAnswers = currentAnswers.filter(
-        (answer) => answer !== option.label
-      );
-      setAnswer(currentQuestionIndex, updatedAnswers);
+    // Calculate the updated answers after the option selection
+    const updatedAnswers = isSelected
+      ? currentAnswers.filter((answer) => answer !== option.label)
+      : [...currentAnswers, option.label];
 
-      if (option.subQuestionIndex !== undefined) {
+    setAnswer(currentQuestionIndex, updatedAnswers);
+
+    // Perform actions based on selection or deselection
+    if (option.subQuestionIndex !== undefined) {
+      if (isSelected) {
         console.log(`Removing ${option.subQuestionIndex} from the questions`);
         removeSubQuestion(option.subQuestionIndex);
-      }
-    } else {
-      const updatedAnswers = [...currentAnswers, option.label];
-      setAnswer(currentQuestionIndex, updatedAnswers);
-
-      if (option.subQuestionIndex !== undefined) {
+      } else {
         console.log(`Inserting ${option.subQuestionIndex} in the questions`);
         insertSubQuestion(option.subQuestionIndex);
       }
     }
-    if (currentQuestion.hasMultipleAnswers) {
-      const currentAnswers = answers[currentQuestionIndex] || [];
+    // Determine and print options not selected
+    const optionsNotSelected = currentQuestion.options
+      .filter((opt) => !updatedAnswers.includes(opt.label))
+      .map((opt) => opt.label);
 
-      // Check if the selected option label is already present in answers
-      if (currentAnswers.includes(option.label)) {
-        const updatedAnswers = currentAnswers.filter(
-          (answer) => answer !== option.label
-        );
-        setAnswer(currentQuestionIndex, updatedAnswers);
-      } else {
-        const updatedAnswers = [...currentAnswers, option.label];
-        setAnswer(currentQuestionIndex, updatedAnswers);
-        if (option.subQuestionIndex !== undefined) {
-          console.log(`Inserting ${option.subQuestionIndex} in the questions`);
-          insertSubQuestion(option.subQuestionIndex);
-        }
-      }
-    } else {
-      setAnswer(currentQuestionIndex, [option.label]);
-      console.log(option);
-      if (option.subQuestionIndex !== undefined) {
-        console.log(`Inserting ${option.subQuestionIndex} in the questions`);
-        insertSubQuestion(option.subQuestionIndex);
-      }
+    console.log("Options not selected:", optionsNotSelected);
+    // Insert a mock follow-up question if the selected option is not chosen
+    if (optionsNotSelected.includes("Content creation on own profiles")) {
+      // Insert the mock follow-up question using insertSubQuestion
+      insertSubQuestion(10);
+    }
+
+    if (!currentQuestion.hasMultipleAnswers) {
+      // Move to the next question if not a multiple-answer question
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
+  // const handleOptionSelect = (option: Option) => {
+  //   const currentAnswers = answers[currentQuestionIndex] || [];
+
+  //   // Check if the selected option label is already present in answers
+  //   if (currentAnswers.includes(option.label)) {
+  //     const updatedAnswers = currentAnswers.filter(
+  //       (answer) => answer !== option.label
+  //     );
+  //     setAnswer(currentQuestionIndex, updatedAnswers);
+
+  //     if (option.subQuestionIndex !== undefined) {
+  //       console.log(`Removing ${option.subQuestionIndex} from the questions`);
+  //       removeSubQuestion(option.subQuestionIndex);
+  //     }
+  //   } else {
+  //     const updatedAnswers = [...currentAnswers, option.label];
+  //     setAnswer(currentQuestionIndex, updatedAnswers);
+
+  //     if (option.subQuestionIndex !== undefined) {
+  //       console.log(`Inserting ${option.subQuestionIndex} in the questions`);
+  //       insertSubQuestion(option.subQuestionIndex);
+  //     }
+  //   }
+  //   if (currentQuestion.hasMultipleAnswers) {
+  //     const currentAnswers = answers[currentQuestionIndex] || [];
+
+  //     // Check if the selected option label is already present in answers
+  //     if (currentAnswers.includes(option.label)) {
+  //       const updatedAnswers = currentAnswers.filter(
+  //         (answer) => answer !== option.label
+  //       );
+  //       setAnswer(currentQuestionIndex, updatedAnswers);
+  //     } else {
+  //       const updatedAnswers = [...currentAnswers, option.label];
+  //       setAnswer(currentQuestionIndex, updatedAnswers);
+  //       if (option.subQuestionIndex !== undefined) {
+  //         console.log(`Inserting ${option.subQuestionIndex} in the questions`);
+  //         insertSubQuestion(option.subQuestionIndex);
+  //       }
+  //     }
+  //   } else {
+  //     setAnswer(currentQuestionIndex, [option.label]);
+  //     console.log(option);
+  //     if (option.subQuestionIndex !== undefined) {
+  //       console.log(`Inserting ${option.subQuestionIndex} in the questions`);
+  //       insertSubQuestion(option.subQuestionIndex);
+  //     }
+  //     setCurrentQuestionIndex(currentQuestionIndex + 1);
+  //   }
+  // };
+
   const handleNextQuestion = () => {
-   
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleInputNext = () => {
+    if (inputValue.trim() !== "") {
+      setAnswer(currentQuestionIndex, [inputValue]); // Save input value to answers
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-    
+      setInputValue(""); // Clear input value
+    }
+  };
+
+  const handleFormInputChange = (
+    questionId: number,
+    value: string | string[]
+  ) => {
+    const updatedFields = formFields.map((field) =>
+      field.questionId === questionId ? { ...field, value } : field
+    );
+    setFormFields(updatedFields);
+  };
+  const handleMultiSelectClick = (
+    questionId: number,
+    selectedOption: string
+  ) => {
+    setFormFields((prevFields) =>
+      prevFields.map((field) => {
+        if (field.questionId === questionId) {
+          const currentValue = Array.isArray(field.value) ? field.value : [];
+          if (currentValue.includes(selectedOption)) {
+            return {
+              ...field,
+              value: currentValue.filter((option) => option !== selectedOption),
+            };
+          } else {
+            return {
+              ...field,
+              value: [...currentValue, selectedOption],
+            };
+          }
+        }
+        return field;
+      })
+    );
+  };
+  const handleFormSubmit = () => {
+    // Handle form submission here
+    const combinedAnswers = formFields
+      .map((field) => {
+        if (Array.isArray(field.value)) {
+          return `${field.label}: ${field.value.join(", ")}`; // Combine question and array values
+        }
+        return `${field.label}: ${field.value}`;
+      })
+      .filter((answer) => answer !== "");
+
+    // Set the combined answers for the current question
+    setAnswer(currentQuestionIndex, combinedAnswers);
+
+    // Move to the next question or perform other actions
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const [fileURL, setFileURL] = useState<string>("");
+  // Create a storage reference
+  const storage = getStorage(app);
+  const storageRef = ref(storage);
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const fileRef = ref(storageRef, file.name);
+
+      try {
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
+        console.log(downloadURL);
+        setFileURL(downloadURL);
+      } catch (error) {
+        console.error("Error uploading file", error);
+      }
+    }
   };
 
   if (!currentQuestion) {
     console.log(answers);
     return (
       <section className="container p-8 mx-auto bg-white rounded-lg shadow-lg min-w-[400px] md:min-w-xl dark:bg-gray-800 ">
-        <h3 className="mb-2 text-lg font-semibold dark:text-white">Selected Answers:</h3>
+        <h3 className="mb-2 text-lg font-semibold dark:text-white">
+          Selected Answers:
+        </h3>
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
@@ -91,7 +227,9 @@ const QuestionFormThree: React.FC = () => {
           <tbody>
             {flowQuestions.map((question, index) => (
               <tr key={index} className="border-t">
-                <td className="px-4 py-2 dark:text-white">{question.question}</td>
+                <td className="px-4 py-2 dark:text-white">
+                  {question.question}
+                </td>
                 <td className="px-4 py-2 dark:text-white">
                   {answers[index]?.join(", ") || "No answer"}
                 </td>
@@ -100,49 +238,12 @@ const QuestionFormThree: React.FC = () => {
           </tbody>
         </table>
       </section>
-      // <div className="py-6">
-      //   <h2 className="mb-4 text-xl font-semibold text-center">
-      //     Questionnaire completed!
-      //   </h2>
-
-      //   <div>
-      //     <h3 className="mb-2 text-lg font-semibold">User Details:</h3>
-      //     <p>
-      //       {/* Name: {userDetails.name} <br />
-      //       Email: {userDetails.email} */}
-      //     </p>
-      //   </div>
-
-      //   <div className="mt-6">
-      //     <h3 className="mb-2 text-lg font-semibold">Selected Answers:</h3>
-      //     <table className="w-full border-collapse">
-      //       <thead>
-      //         <tr className="bg-gray-200">
-      //           <th className="px-4 py-2 text-left">Question</th>
-      //           <th className="px-4 py-2 text-left">Answer</th>
-      //           <th className="px-4 py-2 text-left">Description</th>
-      //         </tr>
-      //       </thead>
-      //       <tbody>
-      //         {/* {Object.keys(answers).map((index: any) => (
-      //           <tr key={index} className="border-t">
-      //             <td className="px-4 py-2">{[index].question}</td>
-      //             <td className="px-4 py-2">{answers[index][index]}</td>
-
-      //           </tr>
-      //         ))} */}
-      //       </tbody>
-      //     </table>
-      //   </div>
-      // </div>
     );
   }
 
   return (
     <section className="container p-8 mx-auto bg-white rounded-lg shadow-lg min-w-[400px] md:min-w-xl dark:bg-gray-800 ">
-
       {currentQuestionIndex > 0 && (
-        
         <div className="flex items-center justify-start">
           <button
             className="flex items-center px-4 py-2 mb-2 font-bold text-blue-500 border rounded hover:bg-blue-100"
@@ -153,7 +254,14 @@ const QuestionFormThree: React.FC = () => {
           </button>
         </div>
       )}
-      <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">{currentQuestion.question}</h2>
+      <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
+        {currentQuestion.question}
+      </h2>
+      {currentQuestion.inputHeading && (
+        <p className="mb-4 text-xl text-center text-gray-500 dark:text-gray-300">
+          {currentQuestion.inputHeading}
+        </p>
+      )}
       <div className="space-y-2">
         {currentQuestion.options.map((option, _) => (
           <div
@@ -186,6 +294,147 @@ const QuestionFormThree: React.FC = () => {
             </div>
           </div>
         ))}
+        {/* Render the form fields */}
+        {currentQuestion.subQuestionForm && (
+          <div className="p-4 mt-4 border rounded">
+            {formFields.map((field) => (
+              <div key={field.questionId} className="mb-4">
+                {field.inputType === "text" && (
+                  <div>
+                    <label className="block mb-2 font-semibold">
+                      {field.label}
+                    </label>
+                    <input
+                      type="text"
+                      value={field.value as string}
+                      onChange={(event) =>
+                        handleFormInputChange(
+                          field.questionId,
+                          event.target.value
+                        )
+                      }
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
+                )}
+                {field.inputType === "fileUpload" && (
+                  <div>
+                    <label className="block mb-2 font-semibold">
+                      {field.label}
+                    </label>
+                    <div>
+                      <input type="file" onChange={handleFileUpload} />
+                      {fileURL && <img src={fileURL} alt="Uploaded file" />}
+                    </div>
+                  </div>
+                )}
+                {field.inputType === "dropdown" && (
+                  <div>
+                    <label className="block mb-2 font-semibold">
+                      {field.label}
+                    </label>
+                    <select
+                      value={field.value as string}
+                      onChange={(event) =>
+                        handleFormInputChange(
+                          field.questionId,
+                          event.target.value
+                        )
+                      }
+                      className="w-full px-4 py-2 border rounded"
+                    >
+                      <option value="">Select an option</option>
+                      {field.options?.map((option) => (
+                        <option key={option.id} value={option.label}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {field.inputType === "radio" && (
+                  <div>
+                    <label className="block mb-2 font-semibold">
+                      {field.label}
+                    </label>
+                    <div className="mt-2">
+                      {field.options?.map((option) => (
+                        <label
+                          key={option.id}
+                          className="inline-flex items-center mr-4"
+                        >
+                          <input
+                            type="radio"
+                            value={option.label}
+                            checked={field.value === option.label}
+                            onChange={() =>
+                              handleFormInputChange(
+                                field.questionId,
+                                option.label
+                              )
+                            }
+                            className="mr-2"
+                          />
+                          {option.label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {field.questionId == 2 && field.inputType === "multiSelect" && (
+                  <div>
+                    <label className="block mb-2 font-semibold">
+                      {field.label}
+                    </label>
+                    <div className="w-full px-4 py-2 border rounded">
+                      {field.options?.map((option) => (
+                        <div
+                          key={option.id}
+                          onClick={() =>
+                            handleMultiSelectClick(
+                              field.questionId,
+                              option.label
+                            )
+                          }
+                          className={`cursor-pointer border rounded-md mb-1 p-2 flex flex-row justify-between ${
+                            field.value.includes(option.label)
+                              ? "bg-blue-200"
+                              : ""
+                          }`}
+                        >
+                          {option.label}
+
+                          {field.value.includes(option.label) && (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-2 h-2 text-blue-600 sm:h-5 sm:w-5"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            <button
+              className="px-6 py-2 mt-2 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+              onClick={handleFormSubmit}
+              // Add your click handler function here
+              // disabled={!answers[currentQuestionIndex]?.length}
+            >
+              Next
+            </button>
+          </div>
+        )}
         {currentQuestion.hasMultipleAnswers && (
           <button
             className="px-8 py-2 tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80"
@@ -194,6 +443,25 @@ const QuestionFormThree: React.FC = () => {
           >
             Next
           </button>
+        )}
+        {currentQuestion.inputType === "text" && (
+          <div className="mt-4">
+            <input
+              type="text"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter your answer"
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+            <button
+              className="px-6 py-2 mt-2 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+              onClick={handleInputNext}
+              // Add your click handler function here
+              // disabled={!answers[currentQuestionIndex]?.length}
+            >
+              Next
+            </button>
+          </div>
         )}
       </div>
     </section>
