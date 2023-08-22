@@ -18,6 +18,11 @@ const QuestionFormThree: React.FC = () => {
   const currentQuestion = flowQuestions[currentQuestionIndex];
   const [inputValue, setInputValue] = useState(""); // Local state for input value
   const [formFields, setFormFields] = useState<FormField[]>([]);
+
+  const [fileURL, setFileURL] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+
+
   useEffect(() => {
     if (currentQuestion && currentQuestion.subQuestionForm) {
       // Initialize formFields based on subQuestionForm
@@ -170,6 +175,10 @@ const QuestionFormThree: React.FC = () => {
     );
   };
   const handleFormSubmit = () => {
+    if (fileURL) {
+      setAnswer(currentQuestionIndex, [fileURL]);
+    }
+
     // Handle form submission here
     const combinedAnswers = formFields
       .map((field) => {
@@ -187,10 +196,10 @@ const QuestionFormThree: React.FC = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
 
-  const [fileURL, setFileURL] = useState<string>("");
   // Create a storage reference
   const storage = getStorage(app);
   const storageRef = ref(storage);
+
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -200,12 +209,15 @@ const QuestionFormThree: React.FC = () => {
       const fileRef = ref(storageRef, file.name);
 
       try {
+        setIsUploading(true); // Set isUploading to true when starting upload
         await uploadBytes(fileRef, file);
         const downloadURL = await getDownloadURL(fileRef);
         console.log(downloadURL);
         setFileURL(downloadURL);
       } catch (error) {
         console.error("Error uploading file", error);
+      } finally {
+        setIsUploading(false); // Set isUploading to false when upload is complete or fails
       }
     }
   };
@@ -322,9 +334,41 @@ const QuestionFormThree: React.FC = () => {
                     <label className="block mb-2 font-semibold">
                       {field.label}
                     </label>
-                    <div>
+                    <div className="relative">
                       <input type="file" onChange={handleFileUpload} />
-                      {fileURL && <img src={fileURL} alt="Uploaded file" />}
+                      {fileURL && (
+                        <div className="mt-2">
+                          <img
+                            src={fileURL}
+                            alt="Uploaded file"
+                            style={{ width: "100px", height: "100px" }}
+                          />
+                        </div>
+                      )}
+                      {isUploading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
+                          <svg
+                            className="w-8 h-8 text-white animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
