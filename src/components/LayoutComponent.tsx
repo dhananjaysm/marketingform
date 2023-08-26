@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./SidebarComponent";
 import axios from "axios";
-import useDataStore from "../context/dataStore";
+import useDataStore, { Answer } from "../context/dataStore";
 import { Outlet } from "react-router-dom";
 
 const token = import.meta.env.VITE_AIRTABLE_TOKEN;
@@ -11,9 +11,7 @@ const tableName = "marketingtable";
 const LayoutComponent = () => {
   const { setResponseData } = useDataStore();
   const [loading, setLoading] = useState(true); // State for tracking loading status
-  function deserializeResponse(
-    responseString: string
-  ): Record<number, string[]> {
+  function deserializeResponse(responseString: string): Record<number, Answer> {
     return JSON.parse(responseString);
   }
   useEffect(() => {
@@ -52,7 +50,7 @@ const LayoutComponent = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 sm:pl-80">
         {loading ? (
           <div className="flex items-center justify-center min-h-screen">
             <div className="bg-indigo-400 h-max w-max rounded-lg text-white font-bold hover:bg-indigo-300 hover:cursor-not-allowed duration-[500ms,800ms]">

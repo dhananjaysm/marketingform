@@ -69,7 +69,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full h-full space-y-8 bg-white border-r sm:w-80">
+      <nav className="fixed top-0 left-0 hidden w-full h-full space-y-8 bg-white border-r sm:block sm:w-80">
         <div className="flex flex-col h-full px-4">
           <div className="flex items-center h-20 pl-2">
             <div className="flex items-center w-full gap-x-4">

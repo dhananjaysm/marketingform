@@ -10,14 +10,32 @@ const SingleRecordDetails = () => {
   if (!selectedRecord) {
     return <p>Loading...</p>; // Handle loading state or error if needed
   }
+  const response = selectedRecord.fields.Response;
 
   return (
-    <div>
-      <h2>Selected Record Details</h2>
-      <p>Name: {selectedRecord.fields.Name}</p>
-      <p>Email: {selectedRecord.fields.Email}</p>
-      {/* Render other details */}
-    </div>
+    <section className="container p-8 mx-auto bg-white rounded-lg shadow-lg min-w-[400px] md:min-w-xl dark:bg-gray-800">
+      <h2 className="mb-2 text-xl font-semibold">
+        Name: {selectedRecord.fields.Name}
+      </h2>
+      <h2 className="mb-2 text-xl font-semibold">
+        Email: {selectedRecord.fields.Email}
+      </h2>
+      <h3 className="mb-4 text-lg font-semibold dark:text-white">
+        Selected Answers:
+      </h3>
+      <div className="pl-4 space-y-4">
+        {Object.keys(response).map((questionIndex: any) => (
+          <div key={questionIndex} className="space-y-2">
+            <h4 className="font-semibold text-md">
+              Question {Number(questionIndex) + 1}:
+            </h4>
+            <p>{response[questionIndex].question}</p>
+            <p className="font-medium">Answer:</p>
+            <p>{response[questionIndex].answer.join(", ")}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 };
 

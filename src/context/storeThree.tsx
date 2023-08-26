@@ -355,6 +355,12 @@ interface UserDetails {
   email: string;
 }
 
+interface Answer {
+  question: string; // Question text
+  answer: string[]; // Selected answer options
+}
+
+
 interface QuestionStore {
   questions: Question[];
   flowQuestions: Question[];
@@ -362,8 +368,8 @@ interface QuestionStore {
   questionFlow: [];
   currentQuestionIndex: number;
   setCurrentQuestionIndex: (index: number) => void;
-  answers: Record<number, string[]>;
-  setAnswer: (index: number, answer: string[]) => void;
+  answers: Record<number, Answer>;
+  setAnswer: (index: number, answer: Answer) => void;
   insertQuestion: (index: number) => void;
   insertSubQuestion: (subQuestionIndex: number) => void;
   removeSubQuestion: (subQuestionIndex: number) => void;
@@ -391,12 +397,12 @@ const useQuestionStore = create<QuestionStore>((set) => ({
   setCurrentQuestionIndex: (index) =>
     set(() => ({ currentQuestionIndex: index })),
   answers: [],
-  setAnswer: (mainIndex, optionLabels) =>
+  setAnswer: (mainIndex, answer) =>
     set((state) => {
       return {
         answers: {
           ...state.answers,
-          [mainIndex]: optionLabels, // Store the selected options
+          [mainIndex]: answer, // Store the selected options
         },
       };
     }),

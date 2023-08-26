@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 import QuestionFormThree from "../components/QuestionFormThree";
 import { UserDetailsForm } from "../components/UserDetailsForm";
@@ -29,7 +30,11 @@ const FormPage: React.FC = () => {
   return (
     <div className="container p-4 mx-auto">
       {userName && userEmail ? (
-      <QuestionFormThree />
+        <motion.div
+        
+        >
+          <QuestionFormThree />
+        </motion.div>
       ) : (
         <UserDetailsForm
           currentStep={currentStep}

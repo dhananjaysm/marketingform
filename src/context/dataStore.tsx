@@ -1,10 +1,14 @@
 import { create } from "zustand";
 
+export interface Answer {
+  question: string; // Question text
+  answer: string[]; // Selected answer options
+}
 export interface RecordTypeFields {
   Created: string;
   Email: string;
   Name: string;
-  Response: Record<number,string[]>; 
+  Response: Record<number,Answer>; 
 }
 
 export interface RecordType {
