@@ -3,6 +3,19 @@ import useQuestionStore, { FormField, Option } from "../context/storeThree";
 import { FaChevronLeft } from "react-icons/fa";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import app from "../lib/firebase";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+interface FormData {
+  Name: string;
+  Email: string;
+  Response: string;
+  // Add more fields as needed
+}
+
+const token = import.meta.env.VITE_AIRTABLE_TOKEN;
+const baseId = "appnbKxW0Fj7Wwo5m";
+const tableName = "marketingtable";
 
 const QuestionFormThree: React.FC = () => {
   const {
@@ -14,6 +27,7 @@ const QuestionFormThree: React.FC = () => {
     currentQuestionIndex,
     setCurrentQuestionIndex,
     goBack,
+    userDetails
   } = useQuestionStore();
   const currentQuestion = flowQuestions[currentQuestionIndex];
   const [inputValue, setInputValue] = useState(""); // Local state for input value
@@ -21,7 +35,7 @@ const QuestionFormThree: React.FC = () => {
 
   const [fileURL, setFileURL] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
-
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (currentQuestion && currentQuestion.subQuestionForm) {
@@ -35,6 +49,38 @@ const QuestionFormThree: React.FC = () => {
       setFormFields(initialFormFields);
     }
   }, [currentQuestion]);
+
+  // TODO: API CALL TO AIRTABLE
+
+  const submitAnswersToAirtable = async () => {
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+
+    const formData: FormData = {
+      Name: userDetails.name,
+      Email: userDetails.email,
+      Response: JSON.stringify(answers),
+    };
+
+    try {
+      const response = await axios.post(
+        url,
+        { fields: formData },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Record created:", response.data);
+      // Handle the response data
+    } catch (error) {
+      console.error("Error creating record:", error);
+      // Handle errors
+    }
+  };
+
   const handleOptionSelect = (option: Option) => {
     const currentAnswers = answers[currentQuestionIndex] || [];
     const isSelected = currentAnswers.includes(option.label);
@@ -70,7 +116,19 @@ const QuestionFormThree: React.FC = () => {
 
     if (!currentQuestion.hasMultipleAnswers) {
       // Move to the next question if not a multiple-answer question
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      // index= 1 ; length = 2  [0,1]
+      if (currentQuestionIndex == flowQuestions.length - 1) {
+        if (currentQuestionIndex > 0) {
+          // TODO: Write API Call here
+          submitAnswersToAirtable();
+          navigate("/thank-you", { replace: true });
+        } else {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        }
+      } else {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        // If the end of the question flow is reached, navigate to the thank you page
+      }
     }
   };
 
@@ -126,7 +184,13 @@ const QuestionFormThree: React.FC = () => {
   // };
 
   const handleNextQuestion = () => {
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    // setCurrentQuestionIndex(currentQuestionIndex + 1);
+    if (currentQuestionIndex < flowQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      // If the end of the question flow is reached, navigate to the thank you page
+      navigate("/thank-you", { replace: true });
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,8 +200,13 @@ const QuestionFormThree: React.FC = () => {
   const handleInputNext = () => {
     if (inputValue.trim() !== "") {
       setAnswer(currentQuestionIndex, [inputValue]); // Save input value to answers
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
       setInputValue(""); // Clear input value
+      if (currentQuestionIndex < flowQuestions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        // If the end of the question flow is reached, navigate to the thank you page
+        navigate("/thank-you", { replace: true });
+      }
     }
   };
 
@@ -174,6 +243,7 @@ const QuestionFormThree: React.FC = () => {
       })
     );
   };
+
   const handleFormSubmit = () => {
     if (fileURL) {
       setAnswer(currentQuestionIndex, [fileURL]);
@@ -193,7 +263,12 @@ const QuestionFormThree: React.FC = () => {
     setAnswer(currentQuestionIndex, combinedAnswers);
 
     // Move to the next question or perform other actions
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    if (currentQuestionIndex < flowQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      // If the end of the question flow is reached, navigate to the thank you page
+      navigate("/thank-you", { replace: true });
+    }
   };
 
   // Create a storage reference
@@ -207,7 +282,6 @@ const QuestionFormThree: React.FC = () => {
 
     if (file) {
       const fileRef = ref(storageRef, file.name);
-
       try {
         setIsUploading(true); // Set isUploading to true when starting upload
         await uploadBytes(fileRef, file);
@@ -223,7 +297,8 @@ const QuestionFormThree: React.FC = () => {
   };
 
   if (!currentQuestion) {
-    console.log(answers);
+    console.log(flowQuestions);
+    console.log("Current question Index:", currentQuestionIndex);
     return (
       <section className="container p-8 mx-auto bg-white rounded-lg shadow-lg min-w-[400px] md:min-w-xl dark:bg-gray-800 ">
         <h3 className="mb-2 text-lg font-semibold dark:text-white">

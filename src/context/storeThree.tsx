@@ -133,7 +133,7 @@ const mockSubQuestions: Question[] = [
       }
     ],
     hasMultipleAnswers: false,
-    isFollowUpQuestion: true,
+    isFollowUpQuestion: false,
   },
   {
     id: 10,
@@ -372,7 +372,7 @@ interface QuestionStore {
   goBack: () => void;
 }
 
-export const useQuestionStore = create<QuestionStore>((set) => ({
+const useQuestionStore = create<QuestionStore>((set) => ({
   flowQuestions: [mockQuestions[0]],
   questions: mockQuestions,
   subQuestions: mockSubQuestions,
@@ -511,5 +511,8 @@ export const useQuestionStore = create<QuestionStore>((set) => ({
       };
     }),
 }));
+
+
+
 
 export default useQuestionStore;
