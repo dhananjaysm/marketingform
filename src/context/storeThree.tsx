@@ -365,6 +365,7 @@ interface QuestionStore {
   questions: Question[];
   flowQuestions: Question[];
   subQuestions: Question[];
+  answeredQuestions: Question[],
   questionFlow: [];
   currentQuestionIndex: number;
   setCurrentQuestionIndex: (index: number) => void;
@@ -376,12 +377,16 @@ interface QuestionStore {
   userDetails: UserDetails;
   setUserDetails: (details: UserDetails) => void;
   goBack: () => void;
+  addAnsweredQuestion:(question: Question)=>void;
+  removeLastAnsweredQuestion:()=> void;
+  
 }
 
 const useQuestionStore = create<QuestionStore>((set) => ({
   flowQuestions: [mockQuestions[0]],
   questions: mockQuestions,
   subQuestions: mockSubQuestions,
+  answeredQuestions: [],
   questionFlow: [],
   currentQuestionIndex: 0,
   insertQuestion: (index) =>
@@ -516,6 +521,13 @@ const useQuestionStore = create<QuestionStore>((set) => ({
         answers: newAnswers,
       };
     }),
+    addAnsweredQuestion: (question: Question) =>
+    set((state) => ({ answeredQuestions: [...state.answeredQuestions, question] })),
+    removeLastAnsweredQuestion: () =>
+    set((state) => ({ answeredQuestions: state.answeredQuestions.slice(0, -1) })),
+
+   
+
 }));
 
 
