@@ -29,7 +29,7 @@ const QuestionFormThree: React.FC = () => {
     goBack,
     userDetails,
     answeredQuestions, // Access the answeredQuestions state
-    addAnsweredQuestion, // Function to add a question to the answeredQuestions list
+    // Function to add a question to the answeredQuestions list
     removeLastAnsweredQuestion,
   } = useQuestionStore();
   const currentQuestion = flowQuestions[currentQuestionIndex];
@@ -99,7 +99,6 @@ const QuestionFormThree: React.FC = () => {
       question: flowQuestions[currentQuestionIndex].question,
       answer: updatedAnswers,
     });
-    
 
     // Perform actions based on selection or deselection
     if (option.subQuestionIndex !== undefined) {
@@ -354,8 +353,6 @@ const QuestionFormThree: React.FC = () => {
 
   return (
     <>
-      
-
       <AnimatePresence mode="wait">
         <motion.section
           key={currentQuestionIndex}
