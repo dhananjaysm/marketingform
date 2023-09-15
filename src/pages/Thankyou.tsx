@@ -2,7 +2,27 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import useQuestionStore from "../context/storeThree";
 import { UserDetailsForm } from "../components/UserDetailsForm";
+import axios from "axios";
+
+const token = import.meta.env.VITE_AIRTABLE_TOKEN;
+const baseId = "appnbKxW0Fj7Wwo5m";
+const tableName = "marketingtable";
+interface FormData {
+  Name: string;
+  Email: string;
+  Response: string;
+  // Add more fields as needed
+}
 const Thankyou = () => {
+  const {
+   
+    answers,
+  
+
+    userDetails,
+  // Access the answeredQuestions state
+    // Function to add a question to the answeredQuestions list
+  } = useQuestionStore();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
@@ -21,6 +41,36 @@ const Thankyou = () => {
       setUserDetails({ name: userName, email: inputDetail });
       // Start the questionnaire by setting the current question index
       setCurrentQuestionIndex(0);
+      submitAnswersToAirtable();
+    }
+  };
+
+  const submitAnswersToAirtable = async () => {
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+
+    const formData: FormData = {
+      Name: userDetails.name,
+      Email: userDetails.email,
+      Response: JSON.stringify(answers),
+    };
+
+    try {
+      const response = await axios.post(
+        url,
+        { fields: formData },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Record created:", response.data);
+      // Handle the response data
+    } catch (error) {
+      console.error("Error creating record:", error);
+      // Handle errors
     }
   };
   return (

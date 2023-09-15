@@ -4,18 +4,18 @@ import { FaChevronLeft } from "react-icons/fa";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import app from "../lib/firebase";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-interface FormData {
-  Name: string;
-  Email: string;
-  Response: string;
-  // Add more fields as needed
-}
+// interface FormData {
+//   Name: string;
+//   Email: string;
+//   Response: string;
+//   // Add more fields as needed
+// }
 
-const token = import.meta.env.VITE_AIRTABLE_TOKEN;
-const baseId = "appnbKxW0Fj7Wwo5m";
-const tableName = "marketingtable";
+// const token = import.meta.env.VITE_AIRTABLE_TOKEN;
+// const baseId = "appnbKxW0Fj7Wwo5m";
+// const tableName = "marketingtable";
 
 const QuestionFormThree: React.FC = () => {
   const {
@@ -27,7 +27,7 @@ const QuestionFormThree: React.FC = () => {
     currentQuestionIndex,
     setCurrentQuestionIndex,
     goBack,
-    userDetails,
+    // userDetails,
     answeredQuestions, // Access the answeredQuestions state
     // Function to add a question to the answeredQuestions list
     removeLastAnsweredQuestion,
@@ -55,34 +55,34 @@ const QuestionFormThree: React.FC = () => {
 
   // TODO: API CALL TO AIRTABLE
 
-  const submitAnswersToAirtable = async () => {
-    const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+  // const submitAnswersToAirtable = async () => {
+  //   const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
 
-    const formData: FormData = {
-      Name: userDetails.name,
-      Email: userDetails.email,
-      Response: JSON.stringify(answers),
-    };
+  //   const formData: FormData = {
+  //     Name: userDetails.name,
+  //     Email: userDetails.email,
+  //     Response: JSON.stringify(answers),
+  //   };
 
-    try {
-      const response = await axios.post(
-        url,
-        { fields: formData },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  //   try {
+  //     const response = await axios.post(
+  //       url,
+  //       { fields: formData },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-      console.log("Record created:", response.data);
-      // Handle the response data
-    } catch (error) {
-      console.error("Error creating record:", error);
-      // Handle errors
-    }
-  };
+  //     console.log("Record created:", response.data);
+  //     // Handle the response data
+  //   } catch (error) {
+  //     console.error("Error creating record:", error);
+  //     // Handle errors
+  //   }
+  // };
 
   console.log("Answered Questions:", answeredQuestions);
 
@@ -129,8 +129,8 @@ const QuestionFormThree: React.FC = () => {
       if (currentQuestionIndex == flowQuestions.length - 1) {
         if (currentQuestionIndex > 0) {
           // TODO: Write API Call here
-          submitAnswersToAirtable();
-          navigate("/thank-you", { replace: true });
+          // submitAnswersToAirtable();
+          navigate("/thank-you");
         } else {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         }

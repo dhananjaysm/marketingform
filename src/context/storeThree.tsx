@@ -267,7 +267,7 @@ const mockSubQuestions: Question[] = [
     question:
       "That should be doable. Can you share a few details about your company and let us share a plan of action  with you then?    ",
     options: [
-      { id: 1, label: "Sure", subQuestionIndex: 12 },
+      { id: 1, label: "Sure", subQuestionIndex: 14 },
       { id: 2, label: "No" },
     ],
     hasMultipleAnswers: false,
@@ -277,8 +277,8 @@ const mockSubQuestions: Question[] = [
     id: 14,
     question: "Great, do you have a website?",
     options: [
-      { id: 1, label: "Yes", subQuestionIndex: 14 },
-      { id: 1, label: "No", subQuestionIndex: 14 },
+      { id: 1, label: "Yes", subQuestionIndex: 15 },
+      { id: 1, label: "No", },
     ],
 
     hasMultipleAnswers: false,
@@ -296,12 +296,12 @@ const mockSubQuestions: Question[] = [
     id: 16,
     question: "And a Linkedin profile?",
     options: [
-      { id: 1, label: "Yes", subQuestionIndex: 16 },
-      { id: 1, label: "No", subQuestionIndex: 16 },
+      { id: 1, label: "Yes", subQuestionIndex: 15 },
+      { id: 1, label: "No", subQuestionIndex: 15 },
     ],
 
     hasMultipleAnswers: false,
-    isFollowUpQuestion: false,
+    isFollowUpQuestion: true,
   },
   {
     id: 17,
@@ -309,7 +309,7 @@ const mockSubQuestions: Question[] = [
     options: [],
     inputType: "text",
     hasMultipleAnswers: false,
-    isFollowUpQuestion: true,
+    isFollowUpQuestion: false,
   },
   {
     id: 18,
@@ -320,7 +320,7 @@ const mockSubQuestions: Question[] = [
     ],
 
     hasMultipleAnswers: false,
-    isFollowUpQuestion: false,
+    isFollowUpQuestion: true,
   },
 ];
 
